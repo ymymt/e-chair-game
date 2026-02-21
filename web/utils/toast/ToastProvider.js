@@ -1,10 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
-var toastShape = PropTypes.shape({
-  isOpen: PropTypes.bool.isRequired,
-  message: PropTypes.node,
-  open: PropTypes.func.isRequired,
+var toastShape = React.PropTypes.shape({
+  isOpen: React.PropTypes.bool.isRequired,
+  message: React.PropTypes.node,
+  open: React.PropTypes.func.isRequired,
 });
 
 class ToastProvider extends React.Component {
@@ -56,7 +54,7 @@ ToastProvider.childContextTypes = {
 };
 
 ToastProvider.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: React.PropTypes.node.isRequired,
 };
 
 export { ToastProvider, toastShape };

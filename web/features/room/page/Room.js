@@ -88,11 +88,11 @@ class Room extends React.Component {
 
   // === Dialog ref setters (callback refs) ===
 
-  setNoticeDialogRef(el) { this.noticeDialogRef = el; }
-  setWaitingCreaterStartDialogRef(el) { this.waitingCreaterStartDialogRef = el; }
-  setStartTurnDialogRef(el) { this.startTurnDialogRef = el; }
-  setTurnResultDialogRef(el) { this.turnResultDialogRef = el; }
-  setGameResultDialogRef(el) { this.gameResultDialogRef = el; }
+  setNoticeDialogRef(el) { this.noticeDialogRef = el ? React.findDOMNode(el) : null; }
+  setWaitingCreaterStartDialogRef(el) { this.waitingCreaterStartDialogRef = el ? React.findDOMNode(el) : null; }
+  setStartTurnDialogRef(el) { this.startTurnDialogRef = el ? React.findDOMNode(el) : null; }
+  setTurnResultDialogRef(el) { this.turnResultDialogRef = el ? React.findDOMNode(el) : null; }
+  setGameResultDialogRef(el) { this.gameResultDialogRef = el ? React.findDOMNode(el) : null; }
 
   // === Dialog show/close methods ===
 

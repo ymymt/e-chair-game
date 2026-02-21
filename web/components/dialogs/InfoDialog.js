@@ -1,17 +1,20 @@
 import React from 'react';
 
-export function InfoDialog(props) {
-  var border = props.borderColor ? props.borderColor : 'border-red-500';
-  return (
-    <dialog
-      className="min-w-fit max-w-lg top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-transparent backdrop:bg-black/80 shadow-sm w-full"
-      ref={props.dialogRef}
-    >
-      <div
-        className={'animate-scale-in grid gap-4 backdrop:bg-black/80 p-6 text-card-foreground shadow-sm w-full bg-gray-800 border-2 ' + border}
+export class InfoDialog extends React.Component {
+  render() {
+    var props = this.props;
+    var border = props.borderColor ? props.borderColor : 'border-red-500';
+    return (
+      <dialog
+        className="min-w-fit max-w-lg top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-transparent backdrop:bg-black/80 shadow-sm w-full"
+        ref={props.dialogRef}
       >
-        {props.children}
-      </div>
-    </dialog>
-  );
+        <div
+          className={'animate-scale-in grid gap-4 backdrop:bg-black/80 p-6 text-card-foreground shadow-sm w-full bg-gray-800 border-2 ' + border}
+        >
+          {props.children}
+        </div>
+      </dialog>
+    );
+  }
 }

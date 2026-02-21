@@ -1,5 +1,4 @@
 var React = require('react');
-var ReactDOM = require('react-dom');
 var Layout = require('@/components/Layout').Layout;
 var Top = require('@/features/top/page/Top').Top;
 var Room = require('@/features/room/page/Room').default;
@@ -18,7 +17,7 @@ if (roomMatch) {
         window.location.href = '/';
         return;
       }
-      ReactDOM.render(
+      React.render(
         React.createElement(Layout, null,
           React.createElement(Room, { initialData: json.data })
         ),
@@ -29,7 +28,7 @@ if (roomMatch) {
       window.location.href = '/';
     });
 } else {
-  ReactDOM.render(
+  React.render(
     React.createElement(Layout, null,
       React.createElement(Top, null)
     ),

@@ -26,7 +26,7 @@ class Top extends React.Component {
   }
 
   setJoinDialogRef(el) {
-    this.joinDialogRef = el;
+    this.joinDialogRef = el ? React.findDOMNode(el) : null;
   }
 
   showJoinModal() {
