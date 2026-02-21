@@ -13,7 +13,7 @@ UIは全て日本語。
 
 ```bash
 cd web/
-npm install --legacy-peer-deps  # 依存関係のインストール（prop-typesのpeerDep警告回避）
+npm install --legacy-peer-deps  # 依存関係のインストール
 npm run dev                     # 開発サーバー起動（CSS build + Express server + webpack-dev-middleware）
 npm run build                   # プロダクションビルド（CSS build + webpack -p）
 npm run build:css               # Tailwind CSSのみビルド
@@ -24,13 +24,13 @@ npm run build:css               # Tailwind CSSのみビルド
 ## 技術スタック
 
 - **Express + webpack 3** — CSR構成（サーバーサイドレンダリングなし）
-- **React 0.14** + **JavaScript**（TypeScriptなし）
+- **React 0.13** + **JavaScript**（TypeScriptなし）
 - **Tailwind CSS** — カスタムアニメーション定義あり（感電振動、フリップ等）、事前ビルドしてstatic/styles.cssとして配信
 - **Firebase Firestore** — リアルタイムDB、`onSnapshot`でゲーム状態を同期
 - **howler.js** — 効果音再生
 - **nanoid** — ルームID生成
 - **Express** — APIサーバー + 静的ファイル配信 + webpack-dev-middleware（開発時）
-- **prop-types** — レガシーContext API用
+- **React.PropTypes** — レガシーContext API用（React組み込み）
 
 ## アーキテクチャ
 
@@ -73,13 +73,12 @@ static/                 静的ファイル（CSS、効果音、bundle.js）
 - **`componentDidUpdate`**がphase変更を検知して適切なUI処理（ダイアログ表示・効果音再生）をトリガー
 - 同時操作の安全性はFirestoreトランザクション（`change-turn` API）で担保
 
-### React 0.14固有のパターン
+### React 0.13固有のパターン
 
-- **全コンポーネントがクラスコンポーネントまたは関数コンポーネント（hooks不使用）**
+- **全コンポーネントがクラスコンポーネント**（React 0.13は関数コンポーネント未サポート）
 - **レガシーContext API**: `childContextTypes`/`getChildContext`/`contextTypes`でToast通知を提供
 - **callback ref**: `useRef`の代わりに`ref={this.setDialogRef}`パターンでDOM参照を取得
 - **dialogRefプロップ**: `forwardRef`が使えないため、`ref`の代わりに`dialogRef`プロップでダイアログ参照を渡す
-- **関数コンポーネントはnullを返せない**: `return null`の代わりに`return <noscript />`を使用
 
 ### ゲームフェーズの遷移
 

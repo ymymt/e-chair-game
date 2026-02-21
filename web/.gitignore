@@ -44,4 +44,4 @@ next-env.d.ts
 e-chair-game-firebase-service-account.json
 
 # webpack
-web/static/bundle.js
+static/bundle.js
