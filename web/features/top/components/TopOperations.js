@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from '@/components/buttons/Button';
 
-export class TopOperations extends React.Component {
-  render() {
+var TopOperations = React.createClass({
+  render: function() {
     var props = this.props;
     return (
       <div className="flex flex-col gap-4 space-y-1.5 p-6 pt-0">
@@ -25,4 +25,6 @@ export class TopOperations extends React.Component {
       </div>
     );
   }
-}
+});
+
+export { TopOperations };

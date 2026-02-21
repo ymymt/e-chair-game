@@ -1,7 +1,7 @@
 import React from 'react';
 
-export class Armchair extends React.Component {
-  render() {
+var Armchair = React.createClass({
+  render: function() {
     var props = this.props;
     return (
       <svg
@@ -23,4 +23,6 @@ export class Armchair extends React.Component {
       </svg>
     );
   }
-}
+});
+
+export { Armchair };

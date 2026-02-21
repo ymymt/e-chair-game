@@ -1,7 +1,7 @@
 import React from 'react';
 
-export class Skull extends React.Component {
-  render() {
+var Skull = React.createClass({
+  render: function() {
     var props = this.props;
     return (
       <svg
@@ -24,4 +24,6 @@ export class Skull extends React.Component {
       </svg>
     );
   }
-}
+});
+
+export { Skull };

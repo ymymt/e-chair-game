@@ -1,7 +1,7 @@
 import React from 'react';
 
-export class Zap extends React.Component {
-  render() {
+var Zap = React.createClass({
+  render: function() {
     var props = this.props;
     return (
       <svg
@@ -20,4 +20,6 @@ export class Zap extends React.Component {
       </svg>
     );
   }
-}
+});
+
+export { Zap };

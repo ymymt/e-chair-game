@@ -3,8 +3,11 @@ import { InfoDialog } from '@/components/dialogs/InfoDialog';
 import { Armchair } from '@/components/icons/Armchair';
 import { Zap } from '@/components/icons/Zap';
 
-export class StartTurnDialog extends React.Component {
-  render() {
+var StartTurnDialog = React.createClass({
+  getDialogNode: function() {
+    return this.refs.infoDialog.getDialogNode();
+  },
+  render: function() {
     var props = this.props;
     var round = props.round;
     var userId = props.userId;
@@ -12,7 +15,7 @@ export class StartTurnDialog extends React.Component {
 
     return (
       <InfoDialog
-        dialogRef={props.dialogRef}
+        ref="infoDialog"
         borderColor={isAttacker ? 'border-emerald-500' : 'border-orange-500'}
       >
         <div className="animate-flip-in-ver-right flex flex-col items-center gap-4">
@@ -41,4 +44,6 @@ export class StartTurnDialog extends React.Component {
       </InfoDialog>
     );
   }
-}
+});
+
+export { StartTurnDialog };

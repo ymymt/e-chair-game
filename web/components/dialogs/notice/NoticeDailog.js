@@ -2,11 +2,14 @@ import React from 'react';
 import { Button } from '@/components/buttons/Button';
 import { InfoDialog } from '@/components/dialogs/InfoDialog';
 
-export class NoticeDialog extends React.Component {
-  render() {
+var NoticeDialog = React.createClass({
+  getDialogNode: function() {
+    return this.refs.infoDialog.getDialogNode();
+  },
+  render: function() {
     var props = this.props;
     return (
-      <InfoDialog dialogRef={props.dialogRef}>
+      <InfoDialog ref="infoDialog">
         <div>
           <h2 className="font-semibold text-red-500">
             <span>{props.title}</span>
@@ -17,4 +20,6 @@ export class NoticeDialog extends React.Component {
       </InfoDialog>
     );
   }
-}
+});
+
+export { NoticeDialog };

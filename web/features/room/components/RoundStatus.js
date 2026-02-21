@@ -1,7 +1,7 @@
 import React from 'react';
 
-export class RoundStatus extends React.Component {
-  render() {
+var RoundStatus = React.createClass({
+  render: function() {
     var props = this.props;
     var round = props.round;
     var userId = props.userId;
@@ -16,4 +16,6 @@ export class RoundStatus extends React.Component {
       </div>
     );
   }
-}
+});
+
+export { RoundStatus };

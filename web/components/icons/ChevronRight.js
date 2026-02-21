@@ -1,7 +1,7 @@
 import React from 'react';
 
-export class ChevronRight extends React.Component {
-  render() {
+var ChevronRight = React.createClass({
+  render: function() {
     var props = this.props;
     return (
       <svg
@@ -20,4 +20,6 @@ export class ChevronRight extends React.Component {
       </svg>
     );
   }
-}
+});
+
+export { ChevronRight };

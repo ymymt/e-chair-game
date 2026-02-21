@@ -1,8 +1,12 @@
 import React from 'react';
 import { toastShape } from '@/utils/toast/ToastProvider';
 
-class Toast extends React.Component {
-  render() {
+var Toast = React.createClass({
+  contextTypes: {
+    toast: toastShape,
+  },
+
+  render: function() {
     var toast = this.context.toast;
     if (!toast || !toast.isOpen) {
       return null;
@@ -13,10 +17,6 @@ class Toast extends React.Component {
       </div>
     );
   }
-}
-
-Toast.contextTypes = {
-  toast: toastShape,
-};
+});
 
 export { Toast };

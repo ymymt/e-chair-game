@@ -27,12 +27,24 @@ import { RoomPhaseHandlers } from '@/features/room/hooks/roomPhaseHandlers';
 var firestoreConfig = require('@/libs/firestore/config');
 var firestoreLib = require('firebase/firestore');
 
-class Room extends React.Component {
-  constructor(props) {
-    super(props);
+var Room = React.createClass({
+  contextTypes: {
+    toast: toastShape,
+  },
 
-    var initialData = props.initialData;
-    this.state = {
+  getInitialState: function() {
+    var initialData = this.props.initialData;
+
+    this.userId = initialData.userId;
+    this.roomId = initialData.roomId;
+    this.previousRoomData = null;
+    this.unsubscribePromise = null;
+
+    // Sound effects
+    this.shockSound = new Howl({ src: ['/static/sounds/shock.mp3'] });
+    this.safeSound = new Howl({ src: ['/static/sounds/safe.mp3'] });
+
+    return {
       roomData: initialData.room,
       selectedChair: null,
       selectState: { status: 0, error: '' },
@@ -44,61 +56,36 @@ class Room extends React.Component {
         button: { label: '', action: function() {} },
       },
     };
+  },
 
-    this.userId = initialData.userId;
-    this.roomId = initialData.roomId;
-    this.previousRoomData = null;
-    this.unsubscribePromise = null;
+  // === Dialog node getters (string ref chain) ===
 
-    // Sound effects
-    this.shockSound = new Howl({ src: ['/static/sounds/shock.mp3'] });
-    this.safeSound = new Howl({ src: ['/static/sounds/safe.mp3'] });
+  getNoticeDialogNode: function() {
+    return this.refs.noticeDialog.getDialogNode();
+  },
 
-    // Dialog refs
-    this.noticeDialogRef = null;
-    this.waitingCreaterStartDialogRef = null;
-    this.startTurnDialogRef = null;
-    this.turnResultDialogRef = null;
-    this.gameResultDialogRef = null;
+  getWaitingCreaterStartDialogNode: function() {
+    return this.refs.waitingCreaterStartDialog.getDialogNode();
+  },
 
-    // Bind methods
-    this.setNoticeDialogRef = this.setNoticeDialogRef.bind(this);
-    this.setWaitingCreaterStartDialogRef = this.setWaitingCreaterStartDialogRef.bind(this);
-    this.setStartTurnDialogRef = this.setStartTurnDialogRef.bind(this);
-    this.setTurnResultDialogRef = this.setTurnResultDialogRef.bind(this);
-    this.setGameResultDialogRef = this.setGameResultDialogRef.bind(this);
-    this.showNoticeModal = this.showNoticeModal.bind(this);
-    this.closeNoticeModal = this.closeNoticeModal.bind(this);
-    this.showCreaterWaitingStartModal = this.showCreaterWaitingStartModal.bind(this);
-    this.closeCreaterWaitingStartModal = this.closeCreaterWaitingStartModal.bind(this);
-    this.showStartTurnModal = this.showStartTurnModal.bind(this);
-    this.showTurnResultModal = this.showTurnResultModal.bind(this);
-    this.closeTurnResultModal = this.closeTurnResultModal.bind(this);
-    this.showGameResultModal = this.showGameResultModal.bind(this);
-    this.selectChair = this.selectChair.bind(this);
-    this.handleSubmitActivate = this.handleSubmitActivate.bind(this);
-    this.handleChangeTurn = this.handleChangeTurn.bind(this);
-    this.copyRoomId = this.copyRoomId.bind(this);
-    this.setSelectedChair = this.setSelectedChair.bind(this);
-    this.setShowShock = this.setShowShock.bind(this);
-    this.playShockEffect = this.playShockEffect.bind(this);
-    this.playSafeEffect = this.playSafeEffect.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-  }
+  getStartTurnDialogNode: function() {
+    return this.refs.startTurnDialog.getDialogNode();
+  },
 
-  // === Dialog ref setters (callback refs) ===
+  getTurnResultDialogNode: function() {
+    return this.refs.turnResultDialog.getDialogNode();
+  },
 
-  setNoticeDialogRef(el) { this.noticeDialogRef = el ? React.findDOMNode(el) : null; }
-  setWaitingCreaterStartDialogRef(el) { this.waitingCreaterStartDialogRef = el ? React.findDOMNode(el) : null; }
-  setStartTurnDialogRef(el) { this.startTurnDialogRef = el ? React.findDOMNode(el) : null; }
-  setTurnResultDialogRef(el) { this.turnResultDialogRef = el ? React.findDOMNode(el) : null; }
-  setGameResultDialogRef(el) { this.gameResultDialogRef = el ? React.findDOMNode(el) : null; }
+  getGameResultDialogNode: function() {
+    return this.refs.gameResultDialog.getDialogNode();
+  },
 
   // === Dialog show/close methods ===
 
-  showNoticeModal(data, miliseconds) {
-    if (this.noticeDialogRef) {
-      this.noticeDialogRef.showModal();
+  showNoticeModal: function(data, miliseconds) {
+    var node = this.getNoticeDialogNode();
+    if (node) {
+      node.showModal();
       this.setState({
         noticeDialogState: {
           title: data.title,
@@ -113,84 +100,92 @@ class Room extends React.Component {
         self.closeNoticeModal();
       }, miliseconds);
     }
-  }
+  },
 
-  closeNoticeModal() {
-    if (this.noticeDialogRef) {
-      this.noticeDialogRef.close();
+  closeNoticeModal: function() {
+    var node = this.getNoticeDialogNode();
+    if (node) {
+      node.close();
     }
-  }
+  },
 
-  showCreaterWaitingStartModal() {
-    if (this.waitingCreaterStartDialogRef) {
-      this.waitingCreaterStartDialogRef.showModal();
+  showCreaterWaitingStartModal: function() {
+    var node = this.getWaitingCreaterStartDialogNode();
+    if (node) {
+      node.showModal();
     }
-  }
+  },
 
-  closeCreaterWaitingStartModal() {
-    if (this.waitingCreaterStartDialogRef) {
-      this.waitingCreaterStartDialogRef.close();
+  closeCreaterWaitingStartModal: function() {
+    var node = this.getWaitingCreaterStartDialogNode();
+    if (node) {
+      node.close();
     }
-  }
+  },
 
-  showStartTurnModal(miliseconds) {
-    if (this.startTurnDialogRef) {
-      this.startTurnDialogRef.showModal();
+  showStartTurnModal: function(miliseconds) {
+    var node = this.getStartTurnDialogNode();
+    if (node) {
+      node.showModal();
     }
     if (miliseconds) {
       var self = this;
       setTimeout(function() {
-        if (self.startTurnDialogRef) {
-          self.startTurnDialogRef.close();
+        var n = self.getStartTurnDialogNode();
+        if (n) {
+          n.close();
         }
       }, miliseconds);
     }
-  }
+  },
 
-  showTurnResultModal() {
-    if (this.turnResultDialogRef) {
-      this.turnResultDialogRef.showModal();
+  showTurnResultModal: function() {
+    var node = this.getTurnResultDialogNode();
+    if (node) {
+      node.showModal();
     }
-  }
+  },
 
-  closeTurnResultModal() {
-    if (this.turnResultDialogRef) {
-      this.turnResultDialogRef.close();
+  closeTurnResultModal: function() {
+    var node = this.getTurnResultDialogNode();
+    if (node) {
+      node.close();
     }
-  }
+  },
 
-  showGameResultModal() {
-    if (this.gameResultDialogRef) {
-      this.gameResultDialogRef.showModal();
+  showGameResultModal: function() {
+    var node = this.getGameResultDialogNode();
+    if (node) {
+      node.showModal();
     }
-  }
+  },
 
   // === Sound methods ===
 
-  playShockEffect(options) {
+  playShockEffect: function(options) {
     if (options && options.playbackRate) {
       this.shockSound.rate(options.playbackRate);
     }
     this.shockSound.play();
-  }
+  },
 
-  playSafeEffect() {
+  playSafeEffect: function() {
     this.safeSound.play();
-  }
+  },
 
   // === State setters ===
 
-  setSelectedChair(chair) {
+  setSelectedChair: function(chair) {
     this.setState({ selectedChair: chair });
-  }
+  },
 
-  setShowShock(value) {
+  setShowShock: function(value) {
     this.setState({ showShock: value });
-  }
+  },
 
   // === Player operation (computed from state) ===
 
-  getPlayerOperation() {
+  getPlayerOperation: function() {
     var roomData = this.state.roomData;
     var userId = this.userId;
     var operation = {
@@ -219,11 +214,11 @@ class Room extends React.Component {
       operation.wait = true;
     }
     return operation;
-  }
+  },
 
   // === Room actions ===
 
-  getSubmitRoundData(selectedChair) {
+  getSubmitRoundData: function(selectedChair) {
     var roomData = this.state.roomData;
     var playerOperation = this.getPlayerOperation();
     var round = roomData && roomData.round;
@@ -249,17 +244,17 @@ class Room extends React.Component {
       };
     }
     return round;
-  }
+  },
 
-  async selectChair() {
+  selectChair: async function() {
     var result = await selectChairApi({
       roomId: this.roomId,
       roundData: this.getSubmitRoundData(this.state.selectedChair),
     });
     this.setState({ selectState: { status: result.status, error: result.error } });
-  }
+  },
 
-  async copyRoomId() {
+  copyRoomId: async function() {
     try {
       await navigator.clipboard.writeText(this.roomId);
       this.setState({ copyTooltip: 'IDをコピーしました' });
@@ -267,17 +262,17 @@ class Room extends React.Component {
       console.error(error);
       this.setState({ copyTooltip: 'IDをコピーできませんでした' });
     }
-  }
+  },
 
-  async handleSubmitActivate() {
+  handleSubmitActivate: async function() {
     this.closeNoticeModal();
     var res = await activateApi(this.roomId);
     if (res.status !== 200) {
       console.error(res.error);
     }
-  }
+  },
 
-  async handleChangeTurn() {
+  handleChangeTurn: async function() {
     this.closeTurnResultModal();
     var res = await changeTurnApi({
       roomId: this.roomId,
@@ -287,43 +282,41 @@ class Room extends React.Component {
       console.error(res.error);
     }
     this.setState({ selectedChair: null });
-  }
+  },
 
-  isAllReady() {
+  isAllReady: function() {
     var roomData = this.state.roomData;
     if (!roomData) return false;
     return (
       roomData.players.length === 2 &&
       roomData.players.every(function(player) { return player.ready; })
     );
-  }
+  },
 
-  handleFormSubmit(e) {
+  handleFormSubmit: function(e) {
     e.preventDefault();
     this.selectChair();
-  }
+  },
 
   // === Lifecycle ===
 
-  componentDidMount() {
+  componentDidMount: function() {
     var self = this;
     this.unsubscribePromise = (async function() {
       var db = await firestoreConfig.getFirestoreApp();
       var docRef = firestoreLib.doc(db, 'rooms', self.roomId);
       var unsubscribe = firestoreLib.onSnapshot(docRef, function(docSnap) {
         var data = docSnap.data();
-        self.setState(function(prevState) {
-          if (data.round.phase === 'activating') {
-            self.previousRoomData = prevState.roomData;
-          }
-          return { roomData: data };
-        });
+        if (data.round.phase === 'activating') {
+          self.previousRoomData = self.state.roomData;
+        }
+        self.setState({ roomData: data });
       });
       return unsubscribe;
     })();
-  }
+  },
 
-  componentWillUnmount() {
+  componentWillUnmount: function() {
     if (this.unsubscribePromise) {
       this.unsubscribePromise.then(function(unsubscribe) {
         if (typeof unsubscribe === 'function') {
@@ -331,9 +324,9 @@ class Room extends React.Component {
         }
       });
     }
-  }
+  },
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate: function(prevProps, prevState) {
     var roomData = this.state.roomData;
     var prevRoomData = prevState.roomData;
 
@@ -411,9 +404,9 @@ class Room extends React.Component {
         );
       }
     }
-  }
+  },
 
-  render() {
+  render: function() {
     var roomData = this.state.roomData;
     var userId = this.userId;
     var roomId = this.roomId;
@@ -467,31 +460,31 @@ class Room extends React.Component {
             )}
         </form>
         <NoticeDialog
-          dialogRef={this.setNoticeDialogRef}
+          ref="noticeDialog"
           title={this.state.noticeDialogState.title}
           message={this.state.noticeDialogState.message}
           button={this.state.noticeDialogState.button}
         />
         <CreaterWaitingStartDialog
           roomId={roomId}
-          dialogRef={this.setWaitingCreaterStartDialogRef}
+          ref="waitingCreaterStartDialog"
           copyId={this.copyRoomId}
           copyMessage={this.state.copyTooltip}
         />
         <StartTurnDialog
-          dialogRef={this.setStartTurnDialogRef}
+          ref="startTurnDialog"
           round={roomData ? roomData.round : { count: 1, turn: 'top', attackerId: '', phase: 'setting' }}
           userId={userId}
         />
         <TurnResultDialog
-          dialogRef={this.setTurnResultDialogRef}
+          ref="turnResultDialog"
           roomData={roomData}
           previousRoomData={this.previousRoomData}
           userId={userId}
           close={this.handleChangeTurn}
         />
         <GameResultDialog
-          dialogRef={this.setGameResultDialogRef}
+          ref="gameResultDialog"
           roomData={roomData}
           userId={userId}
           close={function() { window.location.href = '/'; }}
@@ -500,10 +493,6 @@ class Room extends React.Component {
       </RoomContainer>
     );
   }
-}
-
-Room.contextTypes = {
-  toast: toastShape,
-};
+});
 
 export default Room;

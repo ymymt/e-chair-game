@@ -1,7 +1,7 @@
 import React from 'react';
 
-export class Chair extends React.Component {
-  render() {
+var Chair = React.createClass({
+  render: function() {
     var props = this.props;
     var chair = props.chair;
     var index = chair - 1;
@@ -26,4 +26,6 @@ export class Chair extends React.Component {
       </div>
     );
   }
-}
+});
+
+export { Chair };

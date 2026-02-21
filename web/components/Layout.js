@@ -2,8 +2,8 @@ import React from 'react';
 import { ToastProvider } from '@/utils/toast/ToastProvider';
 import { Toast } from '@/utils/toast/Toast';
 
-export class Layout extends React.Component {
-  render() {
+var Layout = React.createClass({
+  render: function() {
     var props = this.props;
     return (
       <ToastProvider>
@@ -16,4 +16,6 @@ export class Layout extends React.Component {
       </ToastProvider>
     );
   }
-}
+});
+
+export { Layout };

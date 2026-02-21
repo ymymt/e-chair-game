@@ -2,11 +2,14 @@ import React from 'react';
 import { Button } from '@/components/buttons/Button';
 import { InfoDialog } from '@/components/dialogs/InfoDialog';
 
-export class JoinDialog extends React.Component {
-  render() {
+var JoinDialog = React.createClass({
+  getDialogNode: function() {
+    return this.refs.infoDialog.getDialogNode();
+  },
+  render: function() {
     var props = this.props;
     return (
-      <InfoDialog dialogRef={props.dialogRef}>
+      <InfoDialog ref="infoDialog">
         <div>
           <form
             onSubmit={function(e) {
@@ -53,4 +56,6 @@ export class JoinDialog extends React.Component {
       </InfoDialog>
     );
   }
-}
+});
+
+export { JoinDialog };

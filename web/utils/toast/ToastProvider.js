@@ -5,19 +5,24 @@ var toastShape = React.PropTypes.shape({
   open: React.PropTypes.func.isRequired,
 });
 
-class ToastProvider extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+var ToastProvider = React.createClass({
+  childContextTypes: {
+    toast: toastShape,
+  },
+
+  propTypes: {
+    children: React.PropTypes.node.isRequired,
+  },
+
+  getInitialState: function() {
+    this._timerId = null;
+    return {
       isOpen: false,
       message: '',
     };
-    this._timerId = null;
-    this.open = this.open.bind(this);
-    this.close = this.close.bind(this);
-  }
+  },
 
-  getChildContext() {
+  getChildContext: function() {
     return {
       toast: {
         isOpen: this.state.isOpen,
@@ -25,9 +30,9 @@ class ToastProvider extends React.Component {
         open: this.open,
       },
     };
-  }
+  },
 
-  open(message, milliseconds) {
+  open: function(message, milliseconds) {
     var self = this;
     var ms = milliseconds || 3000;
     if (self._timerId) {
@@ -37,24 +42,16 @@ class ToastProvider extends React.Component {
     self._timerId = setTimeout(function() {
       self.close();
     }, ms);
-  }
+  },
 
-  close() {
+  close: function() {
     this.setState({ isOpen: false, message: '' });
     this._timerId = null;
-  }
+  },
 
-  render() {
+  render: function() {
     return this.props.children;
   }
-}
-
-ToastProvider.childContextTypes = {
-  toast: toastShape,
-};
-
-ToastProvider.propTypes = {
-  children: React.PropTypes.node.isRequired,
-};
+});
 
 export { ToastProvider, toastShape };

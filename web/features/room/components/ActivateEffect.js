@@ -1,8 +1,8 @@
 import React from 'react';
 import { Zap } from '@/components/icons/Zap';
 
-export class ActivateEffect extends React.Component {
-  render() {
+var ActivateEffect = React.createClass({
+  render: function() {
     var props = this.props;
     if (props.result === 'shock') {
       return (
@@ -22,4 +22,6 @@ export class ActivateEffect extends React.Component {
     }
     return null;
   }
-}
+});
+
+export { ActivateEffect };
