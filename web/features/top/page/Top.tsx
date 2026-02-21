@@ -1,7 +1,6 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import { createRoomAction, joinRoomAction } from "@/features/room/action";
+import { useRouter } from "next/router";
+import { createRoomApi, joinRoomApi } from "@/libs/api";
 import { useDialog } from "@/hooks/useDialog";
 import { JoinDialog } from "@/features/top/components/dialogs/JoinDialog";
 import { useToast } from "@/utils/toast/useToast";
@@ -11,6 +10,7 @@ import { TopTitle } from "@/features/top/components/TopTitle";
 import { TopOperations } from "@/features/top/components/TopOperations";
 
 export function Top() {
+  const router = useRouter();
   const toast = useToast();
   const {
     dialogRef: joinDialogRef,
@@ -24,8 +24,11 @@ export function Top() {
   const createAction = async () => {
     setIsCreating(true);
     try {
-      const result = await createRoomAction();
-      setCreateState({ error: result?.error });
+      const result = await createRoomApi();
+      setCreateState({ error: result.error });
+      if (result.roomId) {
+        router.push(`/room/${result.roomId}`);
+      }
     } finally {
       setIsCreating(false);
     }
@@ -36,10 +39,18 @@ export function Top() {
     error: "",
   });
   const joinAction = async (formData: FormData) => {
+    const roomId = formData.get("roomId")?.toString() ?? "";
+    if (!roomId) {
+      setJoinState({ error: "ルームIDを入力してください" });
+      return;
+    }
     setIsJoining(true);
     try {
-      const result = await joinRoomAction(joinState, formData);
-      setJoinState({ error: result?.error });
+      const result = await joinRoomApi(roomId);
+      setJoinState({ error: result.error });
+      if (result.roomId) {
+        router.push(`/room/${result.roomId}`);
+      }
     } finally {
       setIsJoining(false);
     }

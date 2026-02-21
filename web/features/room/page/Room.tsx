@@ -1,8 +1,5 @@
-"use client";
-
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { TooltipRefProps } from "react-tooltip";
+import { useRouter } from "next/router";
 import useSound from "use-sound";
 
 import { useToast } from "@/utils/toast/useToast";
@@ -48,7 +45,6 @@ export default function Room({
   const userId = initialData.userId;
   const roomId = initialData.roomId;
   const [showShock, setShowShock] = useState<"" | "shock" | "safe">("");
-  const tooltipRef = useRef<TooltipRefProps | null>(null);
   const previousRoomDataRef = useRef<GameRoom | null>(null);
   const {
     NoticeDialogRef,
@@ -81,12 +77,12 @@ export default function Room({
     selectState,
     selectChair,
     copyRoomId,
+    copyTooltip,
     submitActivate,
     changeTurn,
   } = useRoomActions({
     roomId,
     userId,
-    tooltipRef,
     roomData,
     playerOperation,
   });
@@ -203,8 +199,8 @@ export default function Room({
       <CreaterWaitingStartDialog
         roomId={roomId!}
         dialogRef={waitingCreaterStartDialogRef}
-        tooltipRef={tooltipRef}
         copyId={copyRoomId}
+        copyMessage={copyTooltip}
       />
       <StartTurnDialog
         dialogRef={startTurnDialogRef}

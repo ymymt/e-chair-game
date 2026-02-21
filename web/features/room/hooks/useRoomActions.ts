@@ -1,17 +1,11 @@
-import {
-  activateAction,
-  changeTurnAction,
-  selectChairAction,
-} from "@/features/room/action";
 import type { PlayerOperation } from "@/features/room/hooks/usePlayerOperation";
+import { activateApi, changeTurnApi, selectChairApi } from "@/libs/api";
 import { GameRoom, Round } from "@/types/room";
 import { useState } from "react";
-import { TooltipRefProps } from "react-tooltip";
 
 type useRoomActionsProps = {
   roomId: string | null;
   userId: string | null;
-  tooltipRef: React.MutableRefObject<TooltipRefProps | null>;
   roomData: GameRoom | null;
   playerOperation: PlayerOperation;
 };
@@ -19,11 +13,11 @@ type useRoomActionsProps = {
 export function useRoomActions({
   roomId,
   userId,
-  tooltipRef,
   roomData,
   playerOperation,
 }: useRoomActionsProps) {
   const [selectedChair, setSelectedChair] = useState<number | null>(null);
+  const [copyTooltip, setCopyTooltip] = useState("クリックしてコピー");
 
   const getSubmitRoundData = (
     selectedChair: number | null
@@ -67,7 +61,7 @@ export function useRoomActions({
     error: "",
   });
   const selectChair = async () => {
-    const result = await selectChairAction({
+    const result = await selectChairApi({
       roomId: roomId,
       roundData: getSubmitRoundData(selectedChair),
     });
@@ -77,22 +71,16 @@ export function useRoomActions({
   const copyRoomId = async () => {
     try {
       await navigator.clipboard.writeText(roomId!);
-      tooltipRef?.current?.open({
-        anchorSelect: "#id-tooltip",
-        content: "IDをコピーしました",
-      });
+      setCopyTooltip("IDをコピーしました");
     } catch (error) {
       console.error(error);
-      tooltipRef?.current?.open({
-        anchorSelect: "#id-tooltip",
-        content: "IDをコピーできませんでした",
-      });
+      setCopyTooltip("IDをコピーできませんでした");
     }
   };
 
   const submitActivate = async (onBeforeActivate?: () => void) => {
     onBeforeActivate?.();
-    const res = await activateAction(roomId!);
+    const res = await activateApi(roomId!);
     if (res.status !== 200) {
       console.error(res.error);
     }
@@ -103,7 +91,7 @@ export function useRoomActions({
     onAfterActivate?: () => void
   ) => {
     onBeforeChange?.();
-    const res = await changeTurnAction({
+    const res = await changeTurnApi({
       roomId: roomId!,
       userId: userId!,
     });
@@ -119,6 +107,7 @@ export function useRoomActions({
     selectState,
     selectChair,
     copyRoomId,
+    copyTooltip,
     submitActivate,
     changeTurn,
   };

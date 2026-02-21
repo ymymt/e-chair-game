@@ -1,5 +1,3 @@
-"use client";
-
 import { createContext, ReactNode } from "react";
 
 export const ToastContext = createContext<
