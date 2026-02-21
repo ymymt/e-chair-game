@@ -18,5 +18,5 @@ export function ActivateEffect(props) {
       </div>
     );
   }
-  return null;
+  return React.createElement('noscript', null);
 }

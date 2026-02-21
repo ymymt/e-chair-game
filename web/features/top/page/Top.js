@@ -1,5 +1,4 @@
 import React from 'react';
-import Router from 'next/router';
 import { toastShape } from '@/utils/toast/ToastProvider';
 import { createRoomApi, joinRoomApi } from '@/libs/api';
 import { JoinDialog } from '@/features/top/components/dialogs/JoinDialog';
@@ -50,7 +49,7 @@ class Top extends React.Component {
       var result = await createRoomApi();
       this.setState({ createError: result.error || '' });
       if (result.roomId) {
-        Router.push('/room/' + result.roomId);
+        window.location.href = '/room/' + result.roomId;
       }
     } finally {
       this.setState({ isCreating: false });
@@ -69,7 +68,7 @@ class Top extends React.Component {
       var result = await joinRoomApi(roomId);
       this.setState({ joinError: result.error || '' });
       if (result.roomId) {
-        Router.push('/room/' + result.roomId);
+        window.location.href = '/room/' + result.roomId;
       }
     } finally {
       this.setState({ isJoining: false });

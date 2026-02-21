@@ -13,23 +13,23 @@ UIは全て日本語。
 
 ```bash
 cd web/
-npm install        # 依存関係のインストール
-npm run dev        # 開発サーバー起動（CSS build + Express server）
-npm run build      # プロダクションビルド（CSS build + next build）
-npm run build:css  # Tailwind CSSのみビルド
+npm install --legacy-peer-deps  # 依存関係のインストール（prop-typesのpeerDep警告回避）
+npm run dev                     # 開発サーバー起動（CSS build + Express server + webpack-dev-middleware）
+npm run build                   # プロダクションビルド（CSS build + webpack -p）
+npm run build:css               # Tailwind CSSのみビルド
 ```
 
 テストフレームワークは未導入。
 
 ## 技術スタック
 
-- **Next.js 3** (Pages Router / getInitialProps / Expressカスタムサーバー)
-- **React 15** + **JavaScript**（TypeScriptなし）
+- **Express + webpack 3** — CSR構成（サーバーサイドレンダリングなし）
+- **React 0.14** + **JavaScript**（TypeScriptなし）
 - **Tailwind CSS** — カスタムアニメーション定義あり（感電振動、フリップ等）、事前ビルドしてstatic/styles.cssとして配信
 - **Firebase Firestore** — リアルタイムDB、`onSnapshot`でゲーム状態を同期
 - **howler.js** — 効果音再生
 - **nanoid** — ルームID生成
-- **Express** — カスタムサーバー（API Routes代替 + 動的ルーティング）
+- **Express** — APIサーバー + 静的ファイル配信 + webpack-dev-middleware（開発時）
 - **prop-types** — レガシーContext API用
 
 ## アーキテクチャ
@@ -37,11 +37,11 @@ npm run build:css  # Tailwind CSSのみビルド
 ### ディレクトリ構造（`web/`配下）
 
 ```
-server.js               Expressカスタムサーバー（API Routes + 動的ルーティング）
-pages/                  Next.js Pages Routerのルーティング
-  _document.js          HTMLドキュメント（CSS/フォント読み込み）
-  index.js              トップページ
-  room.js               ゲームルームページ（getInitialPropsで認証保護）
+server.js               Expressサーバー（API Routes + 静的配信 + webpack-dev-middleware）
+client.js               クライアントエントリポイント（パスベースルーティング）
+index.html              HTMLテンプレート（Google Fonts、Tailwind CSS、bundle.js読み込み）
+webpack.config.js       webpack設定（babel-loader、DefinePlugin、node mock等）
+.babelrc                Babel設定（env + react プリセット）
 features/               機能単位のモジュール
   room/                 ゲームルーム機能
     hooks/              roomPhaseHandlers.js（フェーズ別ハンドラ）
@@ -55,8 +55,15 @@ libs/firestore/         Firebase初期化・Firestore操作関数（CommonJS）
 libs/api.js             クライアントAPI層（Express APIへのfetchラッパー）
 utils/                  ユーティリティ（toast通知等）
   toast/                レガシーContext APIによるToast（childContextTypes/getChildContext）
-static/                 静的ファイル（CSS、効果音）
+static/                 静的ファイル（CSS、効果音、bundle.js）
 ```
+
+### CSRルーティング
+
+`client.js`が`window.location.pathname`でルーティング：
+- `/room/:roomId` → `GET /api/room/:roomId/init`でデータ取得後、Layout + Roomをレンダリング。認証失敗時は`/`にリダイレクト
+- それ以外 → Layout + Topを即座にレンダリング
+- ページ遷移は`window.location.href`による通常遷移（SPA遷移なし）
 
 ### ゲームの状態管理パターン
 
@@ -66,12 +73,13 @@ static/                 静的ファイル（CSS、効果音）
 - **`componentDidUpdate`**がphase変更を検知して適切なUI処理（ダイアログ表示・効果音再生）をトリガー
 - 同時操作の安全性はFirestoreトランザクション（`change-turn` API）で担保
 
-### React 15固有のパターン
+### React 0.14固有のパターン
 
 - **全コンポーネントがクラスコンポーネントまたは関数コンポーネント（hooks不使用）**
 - **レガシーContext API**: `childContextTypes`/`getChildContext`/`contextTypes`でToast通知を提供
 - **callback ref**: `useRef`の代わりに`ref={this.setDialogRef}`パターンでDOM参照を取得
 - **dialogRefプロップ**: `forwardRef`が使えないため、`ref`の代わりに`dialogRef`プロップでダイアログ参照を渡す
+- **関数コンポーネントはnullを返せない**: `return null`の代わりに`return <noscript />`を使用
 
 ### ゲームフェーズの遷移
 
@@ -93,7 +101,7 @@ setting → sitting → activating → result → (次ラウンドのsetting)
 ## 環境変数
 
 Firebase設定用の`NEXT_PUBLIC_FIREBASE_*`環境変数が必要（`libs/firestore/config.js`参照）。
-`.env.local`に定義する。Next.js 3は`.env.local`を自動読み込みしないため、`server.js`と`next.config.js`で`require('dotenv').config()`を使用。クライアントへの公開は`next.config.js`の`DefinePlugin`で行う。
+`.env.local`に定義する。`server.js`と`webpack.config.js`で`require('dotenv').config()`を使用。クライアントへの公開は`webpack.config.js`の`DefinePlugin`で行う。
 
 ## Gitコミット規約
 
