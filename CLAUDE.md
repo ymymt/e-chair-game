@@ -93,6 +93,7 @@ setting → sitting → activating → result → (次ラウンドのsetting)
 ## 環境変数
 
 Firebase設定用の`NEXT_PUBLIC_FIREBASE_*`環境変数が必要（`libs/firestore/config.js`参照）。
+`.env.local`に定義する。Next.js 3は`.env.local`を自動読み込みしないため、`server.js`と`next.config.js`で`require('dotenv').config()`を使用。クライアントへの公開は`next.config.js`の`DefinePlugin`で行う。
 
 ## Gitコミット規約
 
