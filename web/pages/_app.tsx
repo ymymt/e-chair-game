@@ -1,3 +1,5 @@
+import React from "react";
+
 import type { AppProps } from "next/app";
 import { ToastProvider } from "@/utils/toast/ToastProvider";
 import { Toast } from "@/utils/toast/Toast";

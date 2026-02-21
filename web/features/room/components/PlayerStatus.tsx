@@ -1,3 +1,5 @@
+import React from "react";
+
 import { Player } from "@/types/room";
 import { Skull } from "lucide-react";
 

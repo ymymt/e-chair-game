@@ -1,3 +1,5 @@
+import React from "react";
+
 import { Round } from "@/types/room";
 
 type InstructionMessageProps = {

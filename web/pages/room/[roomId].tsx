@@ -1,3 +1,5 @@
+import React from "react";
+
 import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Room from "@/features/room/page/Room";
 import { getRoom, updateRoom } from "@/libs/firestore";

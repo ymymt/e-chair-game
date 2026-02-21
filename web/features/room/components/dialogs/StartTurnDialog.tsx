@@ -1,3 +1,5 @@
+import React from "react";
+
 import { InfoDialog } from "@/components/dialogs/InfoDialog";
 import { Round } from "@/types/room";
 import { Armchair, Zap } from "lucide-react";

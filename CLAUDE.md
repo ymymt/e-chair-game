@@ -23,8 +23,8 @@ npm run lint       # ESLintチェック
 
 ## 技術スタック
 
-- **Next.js 12** (Pages Router / getServerSideProps / API Routes)
-- **React 17** + **TypeScript**（strict mode）
+- **Next.js 10** (Pages Router / getServerSideProps / API Routes)
+- **React 16** + **TypeScript 4.3**（strict mode）
 - **Tailwind CSS** — カスタムアニメーション定義あり（感電振動、フリップ等）
 - **Firebase Firestore** — リアルタイムDB、`onSnapshot`でゲーム状態を同期
 - **use-sound** — 効果音再生
@@ -36,7 +36,7 @@ npm run lint       # ESLintチェック
 
 ```
 pages/                  Next.js Pages Routerのルーティング
-  room/[roomId].tsx     ゲームルームページ（middleware.tsで認証保護）
+  room/[roomId].tsx     ゲームルームページ（getServerSidePropsで認証保護）
   api/room/             API Routes（ルーム作成・参加・椅子選択・ターン進行等）
 features/               機能単位のモジュール
   room/                 ゲームルーム機能
@@ -50,7 +50,6 @@ libs/firestore/         Firebase初期化・Firestore操作関数
 libs/api.ts             クライアントAPI層（API Routesへのfetchラッパー）
 types/room.ts           ゲームの中核型定義（GameRoom, Player, Round）
 utils/                  ユーティリティ（toast通知等）
-middleware.ts           Cookie（userId, roomId）によるルームアクセス制御
 ```
 
 ### ゲームの状態管理パターン
