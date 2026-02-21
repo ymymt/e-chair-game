@@ -14,7 +14,7 @@ UIは全て日本語。
 ```bash
 cd web/
 npm install        # 依存関係のインストール
-npm run dev        # 開発サーバー起動（Turbopack使用）
+npm run dev        # 開発サーバー起動
 npm run build      # プロダクションビルド
 npm run lint       # ESLintチェック
 ```
@@ -23,8 +23,8 @@ npm run lint       # ESLintチェック
 
 ## 技術スタック
 
-- **Next.js 15** (App Router / Server Components / Server Actions)
-- **React 18** + **TypeScript**（strict mode）
+- **Next.js 12** (Pages Router / getServerSideProps / API Routes)
+- **React 17** + **TypeScript**（strict mode）
 - **Tailwind CSS** — カスタムアニメーション定義あり（感電振動、フリップ等）
 - **Firebase Firestore** — リアルタイムDB、`onSnapshot`でゲーム状態を同期
 - **use-sound** — 効果音再生
@@ -35,11 +35,11 @@ npm run lint       # ESLintチェック
 ### ディレクトリ構造（`web/`配下）
 
 ```
-app/                    Next.js App Routerのルーティング
-  room/[roomId]/        ゲームルームページ（middleware.tsで認証保護）
+pages/                  Next.js Pages Routerのルーティング
+  room/[roomId].tsx     ゲームルームページ（middleware.tsで認証保護）
+  api/room/             API Routes（ルーム作成・参加・椅子選択・ターン進行等）
 features/               機能単位のモジュール
   room/                 ゲームルーム機能
-    action.ts           Server Actions（ルーム作成・参加・椅子選択・ターン進行等）
     hooks/              ルーム固有のカスタムフック群
     components/         ルーム固有のUIコンポーネント
     types/              ルーム固有の型定義
@@ -47,6 +47,7 @@ features/               機能単位のモジュール
 components/             共有UIコンポーネント（ボタン、ダイアログ等）
 hooks/                  グローバルカスタムフック
 libs/firestore/         Firebase初期化・Firestore操作関数
+libs/api.ts             クライアントAPI層（API Routesへのfetchラッパー）
 types/room.ts           ゲームの中核型定義（GameRoom, Player, Round）
 utils/                  ユーティリティ（toast通知等）
 middleware.ts           Cookie（userId, roomId）によるルームアクセス制御
@@ -55,10 +56,10 @@ middleware.ts           Cookie（userId, roomId）によるルームアクセス
 ### ゲームの状態管理パターン
 
 - **Firestoreがシングルソース・オブ・トゥルース**：ゲーム状態は全てFirestoreに保存
-- **Server Actions**でFirestoreを更新（`features/room/action.ts`）
+- **API Routes**でFirestoreを更新（`pages/api/room/`）、クライアントからは`libs/api.ts`経由で呼び出し
 - **`useRoomWatcher`**フックで`onSnapshot`リスナーを設定し、クライアント側にリアルタイム反映
 - **`useRoomEffect`**がphase変更を検知して適切なUI処理（ダイアログ表示・効果音再生）をトリガー
-- 同時操作の安全性はFirestoreトランザクション（`changeTurnAction`）で担保
+- 同時操作の安全性はFirestoreトランザクション（`change-turn` API Route）で担保
 
 ### ゲームフェーズの遷移
 

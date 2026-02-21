@@ -1,5 +1,3 @@
-"use client";
-
 import { ToastContext } from "@/utils/toast/toastContext";
 import { useContext } from "react";
 

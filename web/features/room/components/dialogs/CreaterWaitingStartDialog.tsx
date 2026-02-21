@@ -1,19 +1,19 @@
 import { InfoDialog } from "@/components/dialogs/InfoDialog";
 import { Copy } from "lucide-react";
 import { Ref } from "react";
-import { Tooltip, TooltipRefProps } from "react-tooltip";
+import ReactTooltip from "react-tooltip";
 
 type CreaterWaitingStartDialogProps = {
   roomId: string;
   dialogRef: Ref<HTMLDialogElement>;
-  tooltipRef: Ref<TooltipRefProps>;
-  copyId: () => void;
+  copyMessage: string;
+  copyId: () => Promise<void>;
 };
 
 export function CreaterWaitingStartDialog({
   roomId,
   dialogRef,
-  tooltipRef,
+  copyMessage,
   copyId,
 }: CreaterWaitingStartDialogProps) {
   return (
@@ -32,10 +32,16 @@ export function CreaterWaitingStartDialog({
       <div className="flex gap-2 m-auto text-center text-2xl text-red-500">
         <span>{roomId}</span>
         <div>
-          <Tooltip ref={tooltipRef} style={{ fontSize: "16px" }} />
-          <a id="id-tooltip" className="cursor-pointer" onClick={copyId}>
+          <ReactTooltip id="copy-tooltip" effect="solid" />
+          <button
+            type="button"
+            data-tip={copyMessage}
+            data-for="copy-tooltip"
+            className="cursor-pointer"
+            onClick={copyId}
+          >
             <Copy className="text-red-800" />
-          </a>
+          </button>
         </div>
       </div>
     </InfoDialog>
