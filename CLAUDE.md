@@ -23,8 +23,8 @@ npm run lint       # ESLintチェック
 
 ## 技術スタック
 
-- **Next.js 16** (App Router / Server Components / Server Actions)
-- **React 19** + **TypeScript**（strict mode）
+- **Next.js 15** (App Router / Server Components / Server Actions)
+- **React 18** + **TypeScript**（strict mode）
 - **Tailwind CSS** — カスタムアニメーション定義あり（感電振動、フリップ等）
 - **Firebase Firestore** — リアルタイムDB、`onSnapshot`でゲーム状態を同期
 - **use-sound** — 効果音再生
