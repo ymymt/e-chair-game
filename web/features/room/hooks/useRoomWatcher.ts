@@ -10,7 +10,7 @@ export function useRoomWatcher({
 }: {
   roomId: string | null;
   setRoomData: React.Dispatch<React.SetStateAction<GameRoom | null>>;
-  previousRoomDataRef: React.RefObject<GameRoom | null>;
+  previousRoomDataRef: React.MutableRefObject<GameRoom | null>;
 }) {
   useEffect(() => {
     const watchRoom = async () => {

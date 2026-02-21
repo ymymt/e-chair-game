@@ -160,7 +160,12 @@ export default function Room({
           />
         </PlayerStatusContainer>
       </GameStatusContainer>
-      <form action={selectChair}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          selectChair();
+        }}
+      >
         <ChairContainer>
           {roomData?.remainingChairs.map((chair) => (
             <Chair

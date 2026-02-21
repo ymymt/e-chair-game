@@ -4,7 +4,7 @@ import { Ref } from "react";
 
 type JoinDialogProps = {
   dialogRef: Ref<HTMLDialogElement>;
-  joinAction: (payload: FormData) => void;
+  joinAction: (payload: FormData) => Promise<void>;
   joinState: { error: string | undefined };
   isJoining: boolean;
   closeJoinModal: () => void;
@@ -20,7 +20,12 @@ export function JoinDialog({
   return (
     <InfoDialog ref={dialogRef}>
       <div>
-        <form action={joinAction}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            joinAction(new FormData(e.currentTarget));
+          }}
+        >
           <h2 className="font-semibold text-red-500">
             <span>ルーム入室</span>
           </h2>
