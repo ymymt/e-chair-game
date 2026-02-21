@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "node patches/apply-patches.js",
     "build:css": "tailwindcss -i ./styles/globals.css -o ./static/styles.css --minify",
     "dev": "npm run build:css && node server.js",
     "build": "npm run build:css && next build",
@@ -22,8 +23,8 @@
     "nanoid": "^3.3.8",
     "next": "^3.2.3",
     "prop-types": "^15.8.1",
-    "react": "^15.6.2",
-    "react-dom": "^15.6.2"
+    "react": "^0.14.10",
+    "react-dom": "^0.14.10"
   },
   "devDependencies": {
     "autoprefixer": "^9.8.8",

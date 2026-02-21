@@ -13,10 +13,10 @@ UIは全て日本語。
 
 ```bash
 cd web/
-npm install        # 依存関係のインストール
-npm run dev        # 開発サーバー起動（CSS build + Express server）
-npm run build      # プロダクションビルド（CSS build + next build）
-npm run build:css  # Tailwind CSSのみビルド
+npm install --legacy-peer-deps  # 依存関係のインストール（Next.js 3がReact 15をpeer depとして要求するため--legacy-peer-deps必須）
+npm run dev                     # 開発サーバー起動（CSS build + Express server）
+npm run build                   # プロダクションビルド（CSS build + next build）
+npm run build:css               # Tailwind CSSのみビルド
 ```
 
 テストフレームワークは未導入。
@@ -24,7 +24,7 @@ npm run build:css  # Tailwind CSSのみビルド
 ## 技術スタック
 
 - **Next.js 3** (Pages Router / getInitialProps / Expressカスタムサーバー)
-- **React 15** + **JavaScript**（TypeScriptなし）
+- **React 0.14** + **JavaScript**（TypeScriptなし）
 - **Tailwind CSS** — カスタムアニメーション定義あり（感電振動、フリップ等）、事前ビルドしてstatic/styles.cssとして配信
 - **Firebase Firestore** — リアルタイムDB、`onSnapshot`でゲーム状態を同期
 - **howler.js** — 効果音再生
@@ -66,12 +66,15 @@ static/                 静的ファイル（CSS、効果音）
 - **`componentDidUpdate`**がphase変更を検知して適切なUI処理（ダイアログ表示・効果音再生）をトリガー
 - 同時操作の安全性はFirestoreトランザクション（`change-turn` API）で担保
 
-### React 15固有のパターン
+### React 0.14固有のパターン
 
 - **全コンポーネントがクラスコンポーネントまたは関数コンポーネント（hooks不使用）**
 - **レガシーContext API**: `childContextTypes`/`getChildContext`/`contextTypes`でToast通知を提供
 - **callback ref**: `useRef`の代わりに`ref={this.setDialogRef}`パターンでDOM参照を取得
 - **dialogRefプロップ**: `forwardRef`が使えないため、`ref`の代わりに`dialogRef`プロップでダイアログ参照を渡す
+- **SFCはnullを返せない**: 関数コンポーネントが何も描画しない場合は`<noscript />`を返す（React 15で修正された制限）
+- **`data-reactid`属性**: 全DOM要素に付与される（React 15で廃止）
+- **内部モジュール構造**: `react-dom/lib/`は存在せず、内部モジュールは`react/lib/`に配置
 
 ### ゲームフェーズの遷移
 

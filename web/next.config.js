@@ -21,6 +21,9 @@ module.exports = {
     }
     config.resolve.alias['@'] = path.resolve(__dirname);
 
+    // React 0.14: internal modules are in react/lib/ instead of react-dom/lib/
+    config.resolve.alias['react-dom/lib/ReactReconciler'] = 'react/lib/ReactReconciler';
+
     // Prefer browser builds to avoid Node.js-only modules (gRPC, tls, net, http2)
     config.resolve.mainFields = ['browser', 'module', 'main'];
 

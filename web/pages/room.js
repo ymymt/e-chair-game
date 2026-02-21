@@ -7,7 +7,7 @@ var roomUtils = require('@/utils/room');
 
 function RoomPage(props) {
   if (!props.initialData || !props.initialData.room) {
-    return null;
+    return <noscript />;
   }
   return (
     <Layout>
