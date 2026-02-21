@@ -1,3 +1,5 @@
+import React from "react";
+
 import { InfoDialog } from "@/components/dialogs/InfoDialog";
 import { Copy } from "lucide-react";
 import { Ref } from "react";

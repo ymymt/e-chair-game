@@ -1,3 +1,5 @@
+import React from "react";
+
 type ChairProps = {
   chair: number;
   setSelectedChair: (chair: number) => void;

@@ -1,11 +1,14 @@
 import { ToastContext } from "@/utils/toast/toastContext";
-import React, { ReactNode, useState } from "react";
+import React, { useState } from "react";
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState<string | ReactNode>("");
+  const [message, setMessage] = useState<string | React.ReactNode>("");
 
-  const open = (message: string | ReactNode, milliseconds: number = 3000) => {
+  const open = (
+    message: string | React.ReactNode,
+    milliseconds: number = 3000
+  ) => {
     setIsOpen(true);
     setMessage(message);
     setTimeout(() => {

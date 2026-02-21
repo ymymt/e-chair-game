@@ -1,3 +1,5 @@
+import React from "react";
+
 export function LoadingOverlay() {
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[1000]">

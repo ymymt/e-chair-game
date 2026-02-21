@@ -1,3 +1,5 @@
+import React from "react";
+
 import { Button } from "@/components/buttons/Button";
 import { GameRoom } from "@/types/room";
 import { ChevronRight } from "lucide-react";

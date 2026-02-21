@@ -129,7 +129,7 @@ export const watchRoom = async (roomId: string) => {
   return unsubscribe;
 };
 
-const createRoomId = async () => {
+const createRoomId = async (): Promise<string> => {
   const db = await getFirestoreApp();
   const alphanumeric = "23456789abcdefghjklmnpqrstuvwxyz";
   const newId = customAlphabet(alphanumeric, 7)();
