@@ -1,5 +1,4 @@
 import React from 'react';
-import Router from 'next/router';
 import { Howl } from 'howler';
 
 import { toastShape } from '@/utils/toast/ToastProvider';
@@ -495,7 +494,7 @@ class Room extends React.Component {
           dialogRef={this.setGameResultDialogRef}
           roomData={roomData}
           userId={userId}
-          close={function() { Router.push('/'); }}
+          close={function() { window.location.href = '/'; }}
         />
         <ActivateEffect result={this.state.showShock} />
       </RoomContainer>
