@@ -1,14 +1,20 @@
 import { Button } from "@/components/buttons/Button";
 
 type TopOperationsProps = {
-  formAction: () => void;
+  formAction: () => Promise<void>;
   joinAction: () => void;
 };
 
 export function TopOperations({ formAction, joinAction }: TopOperationsProps) {
   return (
     <div className="flex flex-col gap-4 space-y-1.5 p-6 pt-0">
-      <form action={formAction} className="flex flex-col gap-4">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          formAction();
+        }}
+        className="flex flex-col gap-4"
+      >
         <Button>ルームを作成</Button>
         <Button
           type="button"

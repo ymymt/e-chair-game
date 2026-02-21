@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 電気椅子ゲーム（web）
 
-## Getting Started
+2人対戦ターン制心理戦ゲームのWebアプリです。
 
-First, run the development server:
+## 前提条件
+
+- Node.js v18 以上
+- npm
+- Firebase プロジェクト（Firestore 有効化済み）
+
+## セットアップ
+
+### 1. 依存関係のインストール
+
+```bash
+npm install
+```
+
+### 2. 環境変数の設定
+
+`.env.local` を作成し、Firebase の認証情報を設定します。
+
+```bash
+cp .env.local.example .env.local  # テンプレートがある場合
+```
+
+または手動で `.env.local` を作成し、以下の環境変数を設定してください。
+
+```env
+NEXT_PUBLIC_FIREBASE_API_KEYY=your-api-key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project.firebasestorage.app
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=123456789
+NEXT_PUBLIC_FIREBASE_APP_ID=1:123456789:web:abcdef
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
+これらの値は [Firebase コンソール](https://console.firebase.google.com/) → プロジェクト設定 → 全般 → 「マイアプリ」セクションから取得できます。
+
+> **注意:** `NEXT_PUBLIC_FIREBASE_API_KEYY` は `KEY` の末尾が `Y` 二つになっています。これは既存コードの命名に合わせたものです。
+
+### 3. 開発サーバーの起動
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+http://localhost:3000 でアプリが起動します。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## その他のコマンド
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| コマンド | 説明 |
+|---|---|
+| `npm run build` | プロダクションビルド |
+| `npm run start` | プロダクションサーバー起動 |
+| `npm run lint` | ESLint によるコードチェック |
 
-## Learn More
+## プロジェクト構成
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/                    Next.js App Router のルーティング
+  room/[roomId]/        ゲームルームページ
+features/               機能単位のモジュール
+  room/                 ゲームルーム機能（Server Actions, hooks, components）
+  top/                  トップページ機能
+components/             共有UIコンポーネント
+hooks/                  グローバルカスタムフック
+libs/firestore/         Firebase 初期化・Firestore 操作関数
+types/                  型定義
+utils/                  ユーティリティ
+middleware.ts           Cookie によるルームアクセス制御
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 注意事項
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Firebase Emulator は未設定のため、リモートの Firestore に直接接続します。開発時は専用の Firebase プロジェクトを使用することを推奨します。

@@ -5,13 +5,13 @@ import {
 } from "@/features/room/action";
 import type { PlayerOperation } from "@/features/room/hooks/usePlayerOperation";
 import { GameRoom, Round } from "@/types/room";
-import { useActionState, useState } from "react";
+import { useState } from "react";
 import { TooltipRefProps } from "react-tooltip";
 
 type useRoomActionsProps = {
   roomId: string | null;
   userId: string | null;
-  tooltipRef: React.RefObject<TooltipRefProps | null>;
+  tooltipRef: React.MutableRefObject<TooltipRefProps | null>;
   roomData: GameRoom | null;
   playerOperation: PlayerOperation;
 };
@@ -59,15 +59,20 @@ export function useRoomActions({
     return round;
   };
 
-  const selectChairActionWithData = selectChairAction.bind(null, {
-    roomId: roomId,
-    roundData: getSubmitRoundData(selectedChair),
-  });
-
-  const [selectState, selectChair] = useActionState(selectChairActionWithData, {
+  const [selectState, setSelectState] = useState<{
+    status: number;
+    error: string | undefined;
+  }>({
     status: 0,
     error: "",
   });
+  const selectChair = async () => {
+    const result = await selectChairAction({
+      roomId: roomId,
+      roundData: getSubmitRoundData(selectedChair),
+    });
+    setSelectState({ status: result.status, error: result.error });
+  };
 
   const copyRoomId = async () => {
     try {

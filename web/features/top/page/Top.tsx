@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createRoomAction, joinRoomAction } from "@/features/room/action";
 import { useDialog } from "@/hooks/useDialog";
 import { JoinDialog } from "@/features/top/components/dialogs/JoinDialog";
@@ -19,21 +19,37 @@ export function Top() {
     closeModal: closeJoinModal,
   } = useDialog();
 
-  const [createState, createAction, isCreating] = useActionState(
-    createRoomAction,
-    {
-      error: "",
+  const [isCreating, setIsCreating] = useState(false);
+  const [createState, setCreateState] = useState<{ error?: string }>({ error: "" });
+  const createAction = async () => {
+    setIsCreating(true);
+    try {
+      const result = await createRoomAction();
+      setCreateState({ error: result?.error });
+    } finally {
+      setIsCreating(false);
     }
-  );
-  const [joinState, joinAction, isJoining] = useActionState(joinRoomAction, {
+  };
+
+  const [isJoining, setIsJoining] = useState(false);
+  const [joinState, setJoinState] = useState<{ error: string | undefined }>({
     error: "",
   });
+  const joinAction = async (formData: FormData) => {
+    setIsJoining(true);
+    try {
+      const result = await joinRoomAction(joinState, formData);
+      setJoinState({ error: result?.error });
+    } finally {
+      setIsJoining(false);
+    }
+  };
 
   useEffect(() => {
     if (isJoining || !isShowJoinDialog) {
-      joinState.error = "";
+      setJoinState({ error: "" });
     }
-  }, [isJoining, isShowJoinDialog, joinState]);
+  }, [isJoining, isShowJoinDialog]);
 
   useEffect(() => {
     if (createState.error) {
