@@ -1,7 +1,7 @@
 import React from 'react';
 
-export class Copy extends React.Component {
-  render() {
+var Copy = React.createClass({
+  render: function() {
     var props = this.props;
     return (
       <svg
@@ -21,4 +21,6 @@ export class Copy extends React.Component {
       </svg>
     );
   }
-}
+});
+
+export { Copy };

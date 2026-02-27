@@ -1,7 +1,7 @@
 import React from 'react';
 
-export class InstructionMessage extends React.Component {
-  render() {
+var InstructionMessage = React.createClass({
+  render: function() {
     var props = this.props;
     var playerOperation = props.playerOperation;
     var round = props.round;
@@ -42,4 +42,6 @@ export class InstructionMessage extends React.Component {
       </div>
     );
   }
-}
+});
+
+export { InstructionMessage };

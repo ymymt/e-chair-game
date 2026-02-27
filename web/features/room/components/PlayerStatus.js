@@ -1,8 +1,8 @@
 import React from 'react';
 import { Skull } from '@/components/icons/Skull';
 
-export class PlayerStatus extends React.Component {
-  render() {
+var PlayerStatus = React.createClass({
+  render: function() {
     var props = this.props;
     var userId = props.userId;
     var status = props.status;
@@ -23,4 +23,6 @@ export class PlayerStatus extends React.Component {
       </div>
     );
   }
-}
+});
+
+export { PlayerStatus };

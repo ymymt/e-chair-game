@@ -2,8 +2,11 @@ import React from 'react';
 import { Button } from '@/components/buttons/Button';
 import { ChevronRight } from '@/components/icons/ChevronRight';
 
-export class TurnResultDialog extends React.Component {
-  render() {
+var TurnResultDialog = React.createClass({
+  getDialogNode: function() {
+    return this.refs.dialog.getDOMNode();
+  },
+  render: function() {
     var props = this.props;
     var roomData = props.roomData;
     var previousRoomData = props.previousRoomData;
@@ -56,7 +59,7 @@ export class TurnResultDialog extends React.Component {
     return (
       <dialog
         className="min-w-fit max-w-lg top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  backdrop:bg-black/80 shadow-sm w-full"
-        ref={props.dialogRef}
+        ref="dialog"
       >
         <div className="grid place-items-center gap-4 backdrop:bg-black/80 p-6 text-card-foreground shadow-sm w-full bg-gray-800 border-2 border-red-500">
           <div className="flex items-center flex-col gap-4">
@@ -128,4 +131,6 @@ export class TurnResultDialog extends React.Component {
       </dialog>
     );
   }
-}
+});
+
+export { TurnResultDialog };

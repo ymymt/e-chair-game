@@ -2,11 +2,14 @@ import React from 'react';
 import { InfoDialog } from '@/components/dialogs/InfoDialog';
 import { Copy } from '@/components/icons/Copy';
 
-export class CreaterWaitingStartDialog extends React.Component {
-  render() {
+var CreaterWaitingStartDialog = React.createClass({
+  getDialogNode: function() {
+    return this.refs.infoDialog.getDialogNode();
+  },
+  render: function() {
     var props = this.props;
     return (
-      <InfoDialog dialogRef={props.dialogRef}>
+      <InfoDialog ref="infoDialog">
         <div>
           <h2 className="font-semibold text-red-500">
             <span>ルームを作成しました</span>
@@ -34,4 +37,6 @@ export class CreaterWaitingStartDialog extends React.Component {
       </InfoDialog>
     );
   }
-}
+});
+
+export { CreaterWaitingStartDialog };

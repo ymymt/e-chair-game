@@ -7,43 +7,42 @@ import { TopMenu } from '@/features/top/components/TopMenu';
 import { TopTitle } from '@/features/top/components/TopTitle';
 import { TopOperations } from '@/features/top/components/TopOperations';
 
-class Top extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+var Top = React.createClass({
+  contextTypes: {
+    toast: toastShape,
+  },
+
+  getInitialState: function() {
+    return {
       isCreating: false,
       createError: '',
       isJoining: false,
       joinError: '',
       isShowJoinDialog: false,
     };
-    this.joinDialogRef = null;
-    this.setJoinDialogRef = this.setJoinDialogRef.bind(this);
-    this.showJoinModal = this.showJoinModal.bind(this);
-    this.closeJoinModal = this.closeJoinModal.bind(this);
-    this.createAction = this.createAction.bind(this);
-    this.joinAction = this.joinAction.bind(this);
-  }
+  },
 
-  setJoinDialogRef(el) {
-    this.joinDialogRef = el ? React.findDOMNode(el) : null;
-  }
+  getJoinDialogNode: function() {
+    return this.refs.joinDialog.getDialogNode();
+  },
 
-  showJoinModal() {
-    if (this.joinDialogRef) {
-      this.joinDialogRef.showModal();
+  showJoinModal: function() {
+    var node = this.getJoinDialogNode();
+    if (node) {
+      node.showModal();
       this.setState({ isShowJoinDialog: true });
     }
-  }
+  },
 
-  closeJoinModal() {
-    if (this.joinDialogRef) {
-      this.joinDialogRef.close();
+  closeJoinModal: function() {
+    var node = this.getJoinDialogNode();
+    if (node) {
+      node.close();
       this.setState({ isShowJoinDialog: false });
     }
-  }
+  },
 
-  async createAction() {
+  createAction: async function() {
     this.setState({ isCreating: true });
     try {
       var result = await createRoomApi();
@@ -54,9 +53,9 @@ class Top extends React.Component {
     } finally {
       this.setState({ isCreating: false });
     }
-  }
+  },
 
-  async joinAction(formData) {
+  joinAction: async function(formData) {
     var roomId = formData.get('roomId');
     roomId = roomId ? roomId.toString() : '';
     if (!roomId) {
@@ -73,9 +72,9 @@ class Top extends React.Component {
     } finally {
       this.setState({ isJoining: false });
     }
-  }
+  },
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate: function(prevProps, prevState) {
     // Clear join error when joining starts or dialog closes
     if (
       (this.state.isJoining && !prevState.isJoining) ||
@@ -91,9 +90,9 @@ class Top extends React.Component {
         toast.open(this.state.createError);
       }
     }
-  }
+  },
 
-  render() {
+  render: function() {
     return (
       <div className="min-h-screen bg-gray-900 text-white p-4 grid place-items-center">
         <TopMenu>
@@ -101,7 +100,7 @@ class Top extends React.Component {
           <TopOperations formAction={this.createAction} joinAction={this.showJoinModal} />
         </TopMenu>
         <JoinDialog
-          dialogRef={this.setJoinDialogRef}
+          ref="joinDialog"
           joinAction={this.joinAction}
           joinState={{ error: this.state.joinError }}
           isJoining={this.state.isJoining}
@@ -111,10 +110,6 @@ class Top extends React.Component {
       </div>
     );
   }
-}
-
-Top.contextTypes = {
-  toast: toastShape,
-};
+});
 
 export { Top };

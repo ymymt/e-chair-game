@@ -1,7 +1,7 @@
 import React from 'react';
 
-export class Trophy extends React.Component {
-  render() {
+var Trophy = React.createClass({
+  render: function() {
     var props = this.props;
     return (
       <svg
@@ -25,4 +25,6 @@ export class Trophy extends React.Component {
       </svg>
     );
   }
-}
+});
+
+export { Trophy };

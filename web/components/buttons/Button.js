@@ -1,7 +1,7 @@
 import React from 'react';
 
-export class Button extends React.Component {
-  render() {
+var Button = React.createClass({
+  render: function() {
     var props = this.props;
     var type = props.type || 'submit';
     var textColor = props.textColor || 'text-white';
@@ -20,4 +20,6 @@ export class Button extends React.Component {
       </button>
     );
   }
-}
+});
+
+export { Button };

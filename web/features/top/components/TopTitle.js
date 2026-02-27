@@ -1,8 +1,8 @@
 import React from 'react';
 import { Zap } from '@/components/icons/Zap';
 
-export class TopTitle extends React.Component {
-  render() {
+var TopTitle = React.createClass({
+  render: function() {
     return (
       <div className="p-6">
         <h1 className="flex gap-3 items-center justify-center text-3xl text-center font-semibold text-red-500">
@@ -16,4 +16,6 @@ export class TopTitle extends React.Component {
       </div>
     );
   }
-}
+});
+
+export { TopTitle };

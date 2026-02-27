@@ -1,7 +1,7 @@
 import React from 'react';
 
-export class Meh extends React.Component {
-  render() {
+var Meh = React.createClass({
+  render: function() {
     var props = this.props;
     return (
       <svg
@@ -23,4 +23,6 @@ export class Meh extends React.Component {
       </svg>
     );
   }
-}
+});
+
+export { Meh };
