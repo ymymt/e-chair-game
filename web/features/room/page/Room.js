@@ -1,7 +1,7 @@
 import React from 'react';
 import { Howl } from 'howler';
 
-import { toastShape } from '@/utils/toast/ToastProvider';
+var toastStore = require('@/utils/toast/toastStore');
 
 import { Chair } from '@/features/room/components/Chair';
 import { PlayerStatus } from '@/features/room/components/PlayerStatus';
@@ -28,10 +28,6 @@ var firestoreConfig = require('@/libs/firestore/config');
 var firestoreLib = require('firebase/firestore');
 
 var Room = React.createClass({
-  contextTypes: {
-    toast: toastShape,
-  },
-
   getInitialState: function() {
     var initialData = this.props.initialData;
 
@@ -335,21 +331,18 @@ var Room = React.createClass({
       this.state.selectState !== prevState.selectState &&
       this.state.selectedChair
     ) {
-      var toast = this.context.toast;
-      if (toast) {
-        var message = this.state.selectState.status === 200
-          ? '番の椅子を選択しました。'
-          : '椅子の選択に失敗しました。';
-        toast.open(
-          React.DOM.span(null,
-            React.DOM.span(
-              {style: {color: 'red', fontWeight: 'bold', fontSize: '1.2rem'}},
-              this.state.selectedChair
-            ),
-            message
-          )
-        );
-      }
+      var message = this.state.selectState.status === 200
+        ? '番の椅子を選択しました。'
+        : '椅子の選択に失敗しました。';
+      toastStore.open(
+        React.DOM.span(null,
+          React.DOM.span(
+            {style: {color: 'red', fontWeight: 'bold', fontSize: '1.2rem'}},
+            this.state.selectedChair
+          ),
+          message
+        )
+      );
     }
 
     // Room effect (equivalent to useRoomEffect)

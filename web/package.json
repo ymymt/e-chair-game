@@ -24,7 +24,7 @@
     "firebase": "^11.1.0",
     "howler": "^2.2.4",
     "nanoid": "^3.3.8",
-    "react": "^0.9.0",
+    "react": "^0.8.0",
     "webpack": "^3.12.0"
   },
   "devDependencies": {

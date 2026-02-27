@@ -1,18 +1,30 @@
 import React from 'react';
-import { toastShape } from '@/utils/toast/ToastProvider';
+var toastStore = require('@/utils/toast/toastStore');
 
 var Toast = React.createClass({
-  contextTypes: {
-    toast: toastShape,
+  getInitialState: function() {
+    return toastStore.getState();
+  },
+
+  componentDidMount: function() {
+    var self = this;
+    this._unsubscribe = toastStore.subscribe(function(newState) {
+      self.setState(newState);
+    });
+  },
+
+  componentWillUnmount: function() {
+    if (this._unsubscribe) {
+      this._unsubscribe();
+    }
   },
 
   render: function() {
-    var toast = this.context.toast;
-    if (!toast || !toast.isOpen) {
+    if (!this.state.isOpen) {
       return React.DOM.span(null);
     }
     return React.DOM.div({className: 'fixed p-4 mx-1 bg-gray-800 border-2 text-white rounded-lg shadow-lg'},
-      toast.message
+      this.state.message
     );
   }
 });
