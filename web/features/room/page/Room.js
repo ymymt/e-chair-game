@@ -341,12 +341,9 @@ var Room = React.createClass({
           ? '番の椅子を選択しました。'
           : '椅子の選択に失敗しました。';
         toast.open(
-          React.createElement(
-            'span',
-            null,
-            React.createElement(
-              'span',
-              { style: { color: 'red', fontWeight: 'bold', fontSize: '1.2rem' } },
+          React.DOM.span(null,
+            React.DOM.span(
+              {style: {color: 'red', fontWeight: 'bold', fontSize: '1.2rem'}},
               this.state.selectedChair
             ),
             message
@@ -413,84 +410,77 @@ var Room = React.createClass({
     var playerOperation = this.getPlayerOperation();
     var self = this;
 
-    return (
-      <RoomContainer>
-        <GameStatusContainer>
-          <RoundStatus round={roomData && roomData.round} userId={userId} />
-          <PlayerStatusContainer>
-            <PlayerStatus
-              userId={userId}
-              status={roomData && roomData.players.find(function(p) { return p.id === userId; })}
-            />
-            <PlayerStatus
-              userId={userId}
-              status={roomData && roomData.players.find(function(p) { return p.id !== userId; })}
-            />
-          </PlayerStatusContainer>
-        </GameStatusContainer>
-        <form onSubmit={this.handleFormSubmit}>
-          <ChairContainer>
-            {roomData && roomData.remainingChairs.map(function(chair) {
-              return (
-                <Chair
-                  key={chair}
-                  chair={chair}
-                  setSelectedChair={self.setSelectedChair}
-                  wait={playerOperation.wait}
-                  selected={self.state.selectedChair === chair}
-                />
-              );
-            })}
-            {this.isAllReady() && (
-              <InstructionContainer>
-                <InstructionMessage
-                  playerOperation={playerOperation}
-                  round={roomData && roomData.round}
-                  userId={userId}
-                />
-              </InstructionContainer>
-            )}
-          </ChairContainer>
-          {!playerOperation.wait &&
-            !playerOperation.activate &&
-            this.state.selectedChair && (
-              <div className="sticky bottom-3">
-                <Button styles="border-2 border-red-700">確定</Button>
-              </div>
-            )}
-        </form>
-        <NoticeDialog
-          ref="noticeDialog"
-          title={this.state.noticeDialogState.title}
-          message={this.state.noticeDialogState.message}
-          button={this.state.noticeDialogState.button}
-        />
-        <CreaterWaitingStartDialog
-          roomId={roomId}
-          ref="waitingCreaterStartDialog"
-          copyId={this.copyRoomId}
-          copyMessage={this.state.copyTooltip}
-        />
-        <StartTurnDialog
-          ref="startTurnDialog"
-          round={roomData ? roomData.round : { count: 1, turn: 'top', attackerId: '', phase: 'setting' }}
-          userId={userId}
-        />
-        <TurnResultDialog
-          ref="turnResultDialog"
-          roomData={roomData}
-          previousRoomData={this.previousRoomData}
-          userId={userId}
-          close={this.handleChangeTurn}
-        />
-        <GameResultDialog
-          ref="gameResultDialog"
-          roomData={roomData}
-          userId={userId}
-          close={function() { window.location.href = '/'; }}
-        />
-        <ActivateEffect result={this.state.showShock} />
-      </RoomContainer>
+    return RoomContainer(null,
+      GameStatusContainer(null,
+        RoundStatus({round: roomData && roomData.round, userId: userId}),
+        PlayerStatusContainer(null,
+          PlayerStatus({
+            userId: userId,
+            status: roomData && roomData.players.find(function(p) { return p.id === userId; })
+          }),
+          PlayerStatus({
+            userId: userId,
+            status: roomData && roomData.players.find(function(p) { return p.id !== userId; })
+          })
+        )
+      ),
+      React.DOM.form({onSubmit: this.handleFormSubmit},
+        ChairContainer(null,
+          roomData && roomData.remainingChairs.map(function(chair) {
+            return Chair({
+              key: chair,
+              chair: chair,
+              setSelectedChair: self.setSelectedChair,
+              wait: playerOperation.wait,
+              selected: self.state.selectedChair === chair
+            });
+          }),
+          this.isAllReady() && InstructionContainer(null,
+            InstructionMessage({
+              playerOperation: playerOperation,
+              round: roomData && roomData.round,
+              userId: userId
+            })
+          )
+        ),
+        !playerOperation.wait &&
+          !playerOperation.activate &&
+          this.state.selectedChair &&
+          React.DOM.div({className: 'sticky bottom-3'},
+            Button({styles: 'border-2 border-red-700'}, '確定')
+          )
+      ),
+      NoticeDialog({
+        ref: 'noticeDialog',
+        title: this.state.noticeDialogState.title,
+        message: this.state.noticeDialogState.message,
+        button: this.state.noticeDialogState.button
+      }),
+      CreaterWaitingStartDialog({
+        roomId: roomId,
+        ref: 'waitingCreaterStartDialog',
+        copyId: this.copyRoomId,
+        copyMessage: this.state.copyTooltip
+      }),
+      StartTurnDialog({
+        ref: 'startTurnDialog',
+        round: roomData ? roomData.round : {count: 1, turn: 'top', attackerId: '', phase: 'setting'},
+        userId: userId
+      }),
+      TurnResultDialog({
+        ref: 'turnResultDialog',
+        roomData: roomData,
+        previousRoomData: this.previousRoomData,
+        userId: userId,
+        close: this.handleChangeTurn
+      }),
+      GameResultDialog({
+        ref: 'gameResultDialog',
+        roomData: roomData,
+        userId: userId,
+        close: function() { window.location.href = '/'; }
+      }),
+      ActivateEffect({result: this.state.showShock})
     );
   }
 });

@@ -16,14 +16,12 @@ var Chair = React.createClass({
     var textSize = props.selected ? 'text-lg' : 'text-sm';
     var cursor = props.wait ? 'cursor-not-allowed' : 'cursor-pointer';
 
-    return (
-      <div
-        className={'inline-flex items-center justify-center absolute w-12 h-12 transform -translate-x-1/2 -translate-y-1/2 ' + bgColor + ' ' + textColor + ' ' + textFont + ' ' + textSize + ' transition-all duration-300 border border-white rounded-lg ' + cursor + ' select-none'}
-        style={{ left: left + '%', top: top + '%' }}
-        onClick={props.wait ? undefined : function() { props.setSelectedChair(chair); }}
-      >
-        {chair}
-      </div>
+    return React.DOM.div({
+      className: 'inline-flex items-center justify-center absolute w-12 h-12 transform -translate-x-1/2 -translate-y-1/2 ' + bgColor + ' ' + textColor + ' ' + textFont + ' ' + textSize + ' transition-all duration-300 border border-white rounded-lg ' + cursor + ' select-none',
+      style: {left: left + '%', top: top + '%'},
+      onClick: props.wait ? undefined : function() { props.setSelectedChair(chair); }
+    },
+      chair
     );
   }
 });

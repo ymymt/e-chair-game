@@ -1,7 +1,7 @@
 import React from 'react';
 var toastShape = React.PropTypes.shape({
   isOpen: React.PropTypes.bool.isRequired,
-  message: React.PropTypes.node,
+  message: React.PropTypes.renderable,
   open: React.PropTypes.func.isRequired,
 });
 
@@ -11,7 +11,7 @@ var ToastProvider = React.createClass({
   },
 
   propTypes: {
-    children: React.PropTypes.node.isRequired,
+    children: React.PropTypes.renderable.isRequired,
   },
 
   getInitialState: function() {

@@ -56,79 +56,77 @@ var TurnResultDialog = React.createClass({
       ? '電気椅子を回避しました'
       : '電気椅子を回避されました...';
 
-    return (
-      <dialog
-        className="min-w-fit max-w-lg top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  backdrop:bg-black/80 shadow-sm w-full"
-        ref="dialog"
-      >
-        <div className="grid place-items-center gap-4 backdrop:bg-black/80 p-6 text-card-foreground shadow-sm w-full bg-gray-800 border-2 border-red-500">
-          <div className="flex items-center flex-col gap-4">
-            <h2 className="font-semibold text-red-500">
-              <span className="text-3xl">{headingText}</span>
-            </h2>
-            <p className="pt-1 text-2xl font-semibold text-gray-300">
-              {bodyText1}
-            </p>
-            <div className="flex gap-6">
-              <div className="flex flex-col items-center">
-                <div className="text-gray-400">電気椅子</div>
-                <div className="font-bold text-white text-4xl">
-                  {roomData && roomData.round && roomData.round.electricChair}
-                </div>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="text-gray-400">座った椅子</div>
-                <div className="font-bold text-white text-4xl">
-                  {roomData && roomData.round && roomData.round.seatedChair}
-                </div>
-              </div>
-            </div>
-            <p className="pt-1 text-xl font-semibold text-gray-300">
-              {roomData && roomData.round && roomData.round.attackerId === userId ? 'あなたの' : '相手の'}
-              スコアが更新されました
-            </p>
-            <div className="flex gap-8">
-              <div className="flex flex-col items-center">
-                <div className="text-gray-400">ポイント</div>
-                <div className="flex justify-center items-center">
-                  <div className="font-bold text-white text-3xl">
-                    {attackerPreviousStatus && attackerPreviousStatus.point}
-                  </div>
-                  <ChevronRight className="w-8 h-8 text-gray-500" />
-                  <div
-                    className={'font-bold text-4xl ' + scoreColor(
-                      'point',
-                      attackerPreviousStatus ? attackerPreviousStatus.point : 0,
-                      attackerStatus ? attackerStatus.point : 0
-                    )}
-                  >
-                    {attackerStatus && attackerStatus.point}
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="text-gray-400">感電回数</div>
-                <div className="flex justify-center items-center">
-                  <div className="font-bold text-white text-3xl">
-                    {attackerPreviousStatus && attackerPreviousStatus.shockedCount}
-                  </div>
-                  <ChevronRight className="w-8 h-8 text-gray-500" />
-                  <div
-                    className={'font-bold text-4xl ' + scoreColor(
-                      'shockedCount',
-                      attackerPreviousStatus ? attackerPreviousStatus.shockedCount : 0,
-                      attackerStatus ? attackerStatus.shockedCount : 0
-                    )}
-                  >
-                    {attackerStatus && attackerStatus.shockedCount}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <Button onClick={close}>次へ進む</Button>
-        </div>
-      </dialog>
+    return React.DOM.dialog({
+      className: 'min-w-fit max-w-lg top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  backdrop:bg-black/80 shadow-sm w-full',
+      ref: 'dialog'
+    },
+      React.DOM.div({className: 'grid place-items-center gap-4 backdrop:bg-black/80 p-6 text-card-foreground shadow-sm w-full bg-gray-800 border-2 border-red-500'},
+        React.DOM.div({className: 'flex items-center flex-col gap-4'},
+          React.DOM.h2({className: 'font-semibold text-red-500'},
+            React.DOM.span({className: 'text-3xl'}, headingText)
+          ),
+          React.DOM.p({className: 'pt-1 text-2xl font-semibold text-gray-300'},
+            bodyText1
+          ),
+          React.DOM.div({className: 'flex gap-6'},
+            React.DOM.div({className: 'flex flex-col items-center'},
+              React.DOM.div({className: 'text-gray-400'}, '電気椅子'),
+              React.DOM.div({className: 'font-bold text-white text-4xl'},
+                roomData && roomData.round && roomData.round.electricChair
+              )
+            ),
+            React.DOM.div({className: 'flex flex-col items-center'},
+              React.DOM.div({className: 'text-gray-400'}, '座った椅子'),
+              React.DOM.div({className: 'font-bold text-white text-4xl'},
+                roomData && roomData.round && roomData.round.seatedChair
+              )
+            )
+          ),
+          React.DOM.p({className: 'pt-1 text-xl font-semibold text-gray-300'},
+            roomData && roomData.round && roomData.round.attackerId === userId ? 'あなたの' : '相手の',
+            'スコアが更新されました'
+          ),
+          React.DOM.div({className: 'flex gap-8'},
+            React.DOM.div({className: 'flex flex-col items-center'},
+              React.DOM.div({className: 'text-gray-400'}, 'ポイント'),
+              React.DOM.div({className: 'flex justify-center items-center'},
+                React.DOM.div({className: 'font-bold text-white text-3xl'},
+                  attackerPreviousStatus && attackerPreviousStatus.point
+                ),
+                ChevronRight({className: 'w-8 h-8 text-gray-500'}),
+                React.DOM.div({
+                  className: 'font-bold text-4xl ' + scoreColor(
+                    'point',
+                    attackerPreviousStatus ? attackerPreviousStatus.point : 0,
+                    attackerStatus ? attackerStatus.point : 0
+                  )
+                },
+                  attackerStatus && attackerStatus.point
+                )
+              )
+            ),
+            React.DOM.div({className: 'flex flex-col items-center'},
+              React.DOM.div({className: 'text-gray-400'}, '感電回数'),
+              React.DOM.div({className: 'flex justify-center items-center'},
+                React.DOM.div({className: 'font-bold text-white text-3xl'},
+                  attackerPreviousStatus && attackerPreviousStatus.shockedCount
+                ),
+                ChevronRight({className: 'w-8 h-8 text-gray-500'}),
+                React.DOM.div({
+                  className: 'font-bold text-4xl ' + scoreColor(
+                    'shockedCount',
+                    attackerPreviousStatus ? attackerPreviousStatus.shockedCount : 0,
+                    attackerStatus ? attackerStatus.shockedCount : 0
+                  )
+                },
+                  attackerStatus && attackerStatus.shockedCount
+                )
+              )
+            )
+          )
+        ),
+        Button({onClick: close}, '次へ進む')
+      )
     );
   }
 });

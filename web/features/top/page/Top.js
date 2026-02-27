@@ -93,21 +93,19 @@ var Top = React.createClass({
   },
 
   render: function() {
-    return (
-      <div className="min-h-screen bg-gray-900 text-white p-4 grid place-items-center">
-        <TopMenu>
-          <TopTitle />
-          <TopOperations formAction={this.createAction} joinAction={this.showJoinModal} />
-        </TopMenu>
-        <JoinDialog
-          ref="joinDialog"
-          joinAction={this.joinAction}
-          joinState={{ error: this.state.joinError }}
-          isJoining={this.state.isJoining}
-          closeJoinModal={this.closeJoinModal}
-        />
-        {this.state.isCreating && <LoadingOverlay />}
-      </div>
+    return React.DOM.div({className: 'min-h-screen bg-gray-900 text-white p-4 grid place-items-center'},
+      TopMenu(null,
+        TopTitle(null),
+        TopOperations({formAction: this.createAction, joinAction: this.showJoinModal})
+      ),
+      JoinDialog({
+        ref: 'joinDialog',
+        joinAction: this.joinAction,
+        joinState: {error: this.state.joinError},
+        isJoining: this.state.isJoining,
+        closeJoinModal: this.closeJoinModal
+      }),
+      this.state.isCreating && LoadingOverlay(null)
     );
   }
 });

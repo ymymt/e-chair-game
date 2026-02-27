@@ -32,14 +32,12 @@ var InstructionMessage = React.createClass({
       return 'お待ちください。。。';
     };
 
-    return (
-      <div className="text-center">
-        <p
-          className={'font-bold text-white text-sm bg-gray-800 bg-opacity-75 p-3 rounded-full whitespace-nowrap ' + (!playerOperation.wait ? 'animate-pulse' : '')}
-        >
-          {getInstruction()}
-        </p>
-      </div>
+    return React.DOM.div({className: 'text-center'},
+      React.DOM.p({
+        className: 'font-bold text-white text-sm bg-gray-800 bg-opacity-75 p-3 rounded-full whitespace-nowrap ' + (!playerOperation.wait ? 'animate-pulse' : '')
+      },
+        getInstruction()
+      )
     );
   }
 });
