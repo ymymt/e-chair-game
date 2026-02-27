@@ -1,5 +1,5 @@
 import React from 'react';
-import { toastShape } from '@/utils/toast/ToastProvider';
+var toastStore = require('@/utils/toast/toastStore');
 import { createRoomApi, joinRoomApi } from '@/libs/api';
 import { JoinDialog } from '@/features/top/components/dialogs/JoinDialog';
 import { LoadingOverlay } from '@/components/LoadingOverlay';
@@ -8,10 +8,6 @@ import { TopTitle } from '@/features/top/components/TopTitle';
 import { TopOperations } from '@/features/top/components/TopOperations';
 
 var Top = React.createClass({
-  contextTypes: {
-    toast: toastShape,
-  },
-
   getInitialState: function() {
     return {
       isCreating: false,
@@ -85,10 +81,7 @@ var Top = React.createClass({
 
     // Show toast on create error
     if (this.state.createError && this.state.createError !== prevState.createError) {
-      var toast = this.context.toast;
-      if (toast) {
-        toast.open(this.state.createError);
-      }
+      toastStore.open(this.state.createError);
     }
   },
 

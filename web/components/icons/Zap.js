@@ -15,7 +15,7 @@ var Zap = React.createClass({
       strokeLinejoin: 'round',
       className: props.className || ''
     },
-      React.DOM.polygon({points: '13 2 3 14 12 14 11 22 21 10 12 10 13 2'})
+      React.DOM.path({d: 'M13 2 L3 14 L12 14 L11 22 L21 10 L12 10 Z'})
     );
   }
 });
