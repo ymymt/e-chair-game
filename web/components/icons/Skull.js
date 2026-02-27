@@ -15,11 +15,11 @@ var Skull = React.createClass({
       strokeLinejoin: 'round',
       className: props.className || ''
     },
-      React.DOM.circle({cx: '9', cy: '12', r: '1'}),
+      [React.DOM.circle({cx: '9', cy: '12', r: '1'}),
       React.DOM.circle({cx: '15', cy: '12', r: '1'}),
       React.DOM.path({d: 'M8 20v2h8v-2'}),
       React.DOM.path({d: 'm12.5 17-.5-1-.5 1h1z'}),
-      React.DOM.path({d: 'M16 20a2 2 0 0 0 1.56-3.25 8 8 0 1 0-11.12 0A2 2 0 0 0 8 20'})
+      React.DOM.path({d: 'M16 20a2 2 0 0 0 1.56-3.25 8 8 0 1 0-11.12 0A2 2 0 0 0 8 20'})]
     );
   }
 });

@@ -57,39 +57,39 @@ var TurnResultDialog = React.createClass({
       : '電気椅子を回避されました...';
 
     return React.DOM.div({ref: 'dialog', style: {display: 'none'}},
-      React.DOM.div({className: 'fixed inset-0 bg-black/80 z-50'}),
+      [React.DOM.div({className: 'fixed inset-0 bg-black/80 z-50'}),
       React.DOM.div({className: 'fixed min-w-fit max-w-lg top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full'},
         React.DOM.div({className: 'grid place-items-center gap-4 p-6 text-card-foreground shadow-sm w-full bg-gray-800 border-2 border-red-500'},
-        React.DOM.div({className: 'flex items-center flex-col gap-4'},
-          React.DOM.h2({className: 'font-semibold text-red-500'},
+        [React.DOM.div({className: 'flex items-center flex-col gap-4'},
+          [React.DOM.h2({className: 'font-semibold text-red-500'},
             React.DOM.span({className: 'text-3xl'}, headingText)
           ),
           React.DOM.p({className: 'pt-1 text-2xl font-semibold text-gray-300'},
             bodyText1
           ),
           React.DOM.div({className: 'flex gap-6'},
-            React.DOM.div({className: 'flex flex-col items-center'},
-              React.DOM.div({className: 'text-gray-400'}, '電気椅子'),
+            [React.DOM.div({className: 'flex flex-col items-center'},
+              [React.DOM.div({className: 'text-gray-400'}, '電気椅子'),
               React.DOM.div({className: 'font-bold text-white text-4xl'},
                 roomData && roomData.round && roomData.round.electricChair
-              )
+              )]
             ),
             React.DOM.div({className: 'flex flex-col items-center'},
-              React.DOM.div({className: 'text-gray-400'}, '座った椅子'),
+              [React.DOM.div({className: 'text-gray-400'}, '座った椅子'),
               React.DOM.div({className: 'font-bold text-white text-4xl'},
                 roomData && roomData.round && roomData.round.seatedChair
-              )
-            )
+              )]
+            )]
           ),
           React.DOM.p({className: 'pt-1 text-xl font-semibold text-gray-300'},
-            roomData && roomData.round && roomData.round.attackerId === userId ? 'あなたの' : '相手の',
-            'スコアが更新されました'
+            [roomData && roomData.round && roomData.round.attackerId === userId ? 'あなたの' : '相手の',
+            'スコアが更新されました']
           ),
           React.DOM.div({className: 'flex gap-8'},
-            React.DOM.div({className: 'flex flex-col items-center'},
-              React.DOM.div({className: 'text-gray-400'}, 'ポイント'),
+            [React.DOM.div({className: 'flex flex-col items-center'},
+              [React.DOM.div({className: 'text-gray-400'}, 'ポイント'),
               React.DOM.div({className: 'flex justify-center items-center'},
-                React.DOM.div({className: 'font-bold text-white text-3xl'},
+                [React.DOM.div({className: 'font-bold text-white text-3xl'},
                   attackerPreviousStatus && attackerPreviousStatus.point
                 ),
                 ChevronRight({className: 'w-8 h-8 text-gray-500'}),
@@ -101,13 +101,13 @@ var TurnResultDialog = React.createClass({
                   )
                 },
                   attackerStatus && attackerStatus.point
-                )
-              )
+                )]
+              )]
             ),
             React.DOM.div({className: 'flex flex-col items-center'},
-              React.DOM.div({className: 'text-gray-400'}, '感電回数'),
+              [React.DOM.div({className: 'text-gray-400'}, '感電回数'),
               React.DOM.div({className: 'flex justify-center items-center'},
-                React.DOM.div({className: 'font-bold text-white text-3xl'},
+                [React.DOM.div({className: 'font-bold text-white text-3xl'},
                   attackerPreviousStatus && attackerPreviousStatus.shockedCount
                 ),
                 ChevronRight({className: 'w-8 h-8 text-gray-500'}),
@@ -119,14 +119,14 @@ var TurnResultDialog = React.createClass({
                   )
                 },
                   attackerStatus && attackerStatus.shockedCount
-                )
-              )
-            )
-          )
+                )]
+              )]
+            )]
+          )]
         ),
-        Button({onClick: close}, '次へ進む')
+        Button({onClick: close}, '次へ進む')]
         )
-      )
+      )]
     );
   }
 });
