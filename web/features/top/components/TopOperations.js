@@ -12,12 +12,12 @@ var TopOperations = React.createClass({
         },
         className: 'flex flex-col gap-4'
       },
-        Button(null, 'ルームを作成'),
+        [Button(null, 'ルームを作成'),
         Button({
           type: 'button',
           onClick: function() { props.joinAction(); },
           bgColor: 'bg-gray-600'
-        }, 'ルームに入室')
+        }, 'ルームに入室')]
       )
     );
   }

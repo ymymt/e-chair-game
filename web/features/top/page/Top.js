@@ -22,23 +22,23 @@ var Top = React.createClass({
     return this.refs.joinDialog.getDialogNode();
   },
 
-  showJoinModal: function() {
+  showJoinModal: React.autoBind(function() {
     var node = this.getJoinDialogNode();
     if (node) {
       node.style.display = '';
       this.setState({ isShowJoinDialog: true });
     }
-  },
+  }),
 
-  closeJoinModal: function() {
+  closeJoinModal: React.autoBind(function() {
     var node = this.getJoinDialogNode();
     if (node) {
       node.style.display = 'none';
       this.setState({ isShowJoinDialog: false });
     }
-  },
+  }),
 
-  createAction: async function() {
+  createAction: React.autoBind(async function() {
     this.setState({ isCreating: true });
     try {
       var result = await createRoomApi();
@@ -49,9 +49,9 @@ var Top = React.createClass({
     } finally {
       this.setState({ isCreating: false });
     }
-  },
+  }),
 
-  joinAction: async function(formData) {
+  joinAction: React.autoBind(async function(formData) {
     var roomId = formData.get('roomId');
     roomId = roomId ? roomId.toString() : '';
     if (!roomId) {
@@ -68,28 +68,30 @@ var Top = React.createClass({
     } finally {
       this.setState({ isJoining: false });
     }
-  },
+  }),
 
   componentDidUpdate: function(prevProps, prevState) {
+    var self = this;
     // Clear join error when joining starts or dialog closes
     if (
       (this.state.isJoining && !prevState.isJoining) ||
       (!this.state.isShowJoinDialog && prevState.isShowJoinDialog)
     ) {
-      this.setState({ joinError: '' });
+      setTimeout(function() { self.setState({ joinError: '' }); }, 0);
     }
 
     // Show toast on create error
     if (this.state.createError && this.state.createError !== prevState.createError) {
-      toastStore.open(this.state.createError);
+      var error = this.state.createError;
+      setTimeout(function() { toastStore.open(error); }, 0);
     }
   },
 
   render: function() {
     return React.DOM.div({className: 'min-h-screen bg-gray-900 text-white p-4 grid place-items-center'},
-      TopMenu(null,
-        TopTitle(null),
-        TopOperations({formAction: this.createAction, joinAction: this.showJoinModal})
+      [TopMenu(null,
+        [TopTitle(null),
+        TopOperations({formAction: this.createAction, joinAction: this.showJoinModal})]
       ),
       JoinDialog({
         ref: 'joinDialog',
@@ -98,7 +100,7 @@ var Top = React.createClass({
         isJoining: this.state.isJoining,
         closeJoinModal: this.closeJoinModal
       }),
-      this.state.isCreating && LoadingOverlay(null)
+      this.state.isCreating && LoadingOverlay(null)]
     );
   }
 });

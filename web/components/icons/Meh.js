@@ -15,10 +15,10 @@ var Meh = React.createClass({
       strokeLinejoin: 'round',
       className: props.className || ''
     },
-      React.DOM.circle({cx: '12', cy: '12', r: '10'}),
+      [React.DOM.circle({cx: '12', cy: '12', r: '10'}),
       React.DOM.line({x1: '8', x2: '16', y1: '15', y2: '15'}),
       React.DOM.line({x1: '9', x2: '9.01', y1: '9', y2: '9'}),
-      React.DOM.line({x1: '15', x2: '15.01', y1: '9', y2: '9'})
+      React.DOM.line({x1: '15', x2: '15.01', y1: '9', y2: '9'})]
     );
   }
 });

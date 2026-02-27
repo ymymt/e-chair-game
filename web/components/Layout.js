@@ -7,10 +7,10 @@ var Layout = React.createClass({
     var props = this.props;
     return ToastProvider(null,
       React.DOM.div({className: 'w-full grid place-items-center bg-gray-900'},
-        React.DOM.div({className: 'w-full max-w-screen-md'},
+        [React.DOM.div({className: 'w-full max-w-screen-md'},
           props.children
         ),
-        Toast(null)
+        Toast(null)]
       )
     );
   }

@@ -9,8 +9,8 @@ var CreaterWaitingStartDialog = React.createClass({
   render: function() {
     var props = this.props;
     return InfoDialog({ref: 'infoDialog'},
-      React.DOM.div(null,
-        React.DOM.h2({className: 'font-semibold text-red-500'},
+      [React.DOM.div(null,
+        [React.DOM.h2({className: 'font-semibold text-red-500'},
           React.DOM.span(null, 'ルームを作成しました')
         ),
         React.DOM.p({className: 'pt-1 text-gray-300'},
@@ -18,10 +18,10 @@ var CreaterWaitingStartDialog = React.createClass({
         ),
         React.DOM.p({className: 'pt-1 text-gray-300'},
           '対戦相手が入室しだい、ゲームを開始します。'
-        )
+        )]
       ),
       React.DOM.div({className: 'flex gap-2 m-auto text-center text-2xl text-red-500'},
-        React.DOM.span(null, props.roomId),
+        [React.DOM.span(null, props.roomId),
         React.DOM.div(null,
           React.DOM.button({
             type: 'button',
@@ -31,8 +31,8 @@ var CreaterWaitingStartDialog = React.createClass({
           },
             Copy({className: 'text-red-800'})
           )
-        )
-      )
+        )]
+      )]
     );
   }
 });

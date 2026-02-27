@@ -9,13 +9,13 @@ var NoticeDialog = React.createClass({
   render: function() {
     var props = this.props;
     return InfoDialog({ref: 'infoDialog'},
-      React.DOM.div(null,
-        React.DOM.h2({className: 'font-semibold text-red-500'},
+      [React.DOM.div(null,
+        [React.DOM.h2({className: 'font-semibold text-red-500'},
           React.DOM.span(null, props.title)
         ),
-        React.DOM.p({className: 'pt-1 text-gray-300'}, props.message)
+        React.DOM.p({className: 'pt-1 text-gray-300'}, props.message)]
       ),
-      Button({onClick: props.button.action}, props.button.label)
+      Button({onClick: props.button.action}, props.button.label)]
     );
   }
 });

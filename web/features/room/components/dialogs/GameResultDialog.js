@@ -67,13 +67,13 @@ var GameResultDialog = React.createClass({
     };
 
     return React.DOM.div({ref: 'dialog', style: {display: 'none'}},
-      React.DOM.div({className: 'fixed inset-0 bg-black/80 z-50'}),
+      [React.DOM.div({className: 'fixed inset-0 bg-black/80 z-50'}),
       React.DOM.div({className: 'fixed min-w-fit max-w-lg top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full'},
         React.DOM.div({
           className: animation + ' grid place-items-center gap-4 p-6 text-card-foreground shadow-sm w-full bg-gray-800 border-2 ' + borderColor
         },
-        React.DOM.div({className: 'flex items-center flex-col gap-4'},
-          React.DOM.h2({className: 'font-semibold text-red-500'}, 'ゲーム終了'),
+        [React.DOM.div({className: 'flex items-center flex-col gap-4'},
+          [React.DOM.h2({className: 'font-semibold text-red-500'}, 'ゲーム終了'),
           isWinner
             ? Trophy({className: 'text-yellow-500 w-24 h-24 animate-pulse'})
             : isDraw
@@ -86,8 +86,8 @@ var GameResultDialog = React.createClass({
             getWinningCondition()
           ),
           React.DOM.div({className: 'flex gap-6'},
-            React.DOM.div({className: 'flex flex-col items-center'},
-              React.DOM.div({className: 'text-white font-bold text-md'}, 'あなたのスコア'),
+            [React.DOM.div({className: 'flex flex-col items-center'},
+              [React.DOM.div({className: 'text-white font-bold text-md'}, 'あなたのスコア'),
               React.DOM.div({className: 'text-gray-400'}, '獲得ポイント'),
               React.DOM.div({className: 'font-bold text-green-500 text-4xl'},
                 myStatus && myStatus.point
@@ -95,10 +95,10 @@ var GameResultDialog = React.createClass({
               React.DOM.div({className: 'text-gray-400'}, '感電回数'),
               React.DOM.div({className: 'font-bold text-red-500 text-4xl'},
                 myStatus && myStatus.shockedCount
-              )
+              )]
             ),
             React.DOM.div({className: 'flex flex-col items-center'},
-              React.DOM.div({className: 'text-white font-bold text-md'}, '相手のスコア'),
+              [React.DOM.div({className: 'text-white font-bold text-md'}, '相手のスコア'),
               React.DOM.div({className: 'text-gray-400'}, '獲得ポイント'),
               React.DOM.div({className: 'font-bold text-green-500 text-4xl'},
                 opponentStatus && opponentStatus.point
@@ -106,13 +106,13 @@ var GameResultDialog = React.createClass({
               React.DOM.div({className: 'text-gray-400'}, '感電回数'),
               React.DOM.div({className: 'font-bold text-red-500 text-4xl'},
                 opponentStatus && opponentStatus.shockedCount
-              )
-            )
-          )
+              )]
+            )]
+          )]
         ),
-        Button({onClick: close, bgColor: bgColor}, 'ゲーム終了')
+        Button({onClick: close, bgColor: bgColor}, 'ゲーム終了')]
         )
-      )
+      )]
     );
   }
 });

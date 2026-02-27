@@ -78,7 +78,7 @@ var Room = React.createClass({
 
   // === Dialog show/close methods ===
 
-  showNoticeModal: function(data, miliseconds) {
+  showNoticeModal: React.autoBind(function(data, miliseconds) {
     var node = this.getNoticeDialogNode();
     if (node) {
       node.style.display = '';
@@ -96,14 +96,14 @@ var Room = React.createClass({
         self.closeNoticeModal();
       }, miliseconds);
     }
-  },
+  }),
 
-  closeNoticeModal: function() {
+  closeNoticeModal: React.autoBind(function() {
     var node = this.getNoticeDialogNode();
     if (node) {
       node.style.display = 'none';
     }
-  },
+  }),
 
   showCreaterWaitingStartModal: function() {
     var node = this.getWaitingCreaterStartDialogNode();
@@ -135,12 +135,12 @@ var Room = React.createClass({
     }
   },
 
-  showTurnResultModal: function() {
+  showTurnResultModal: React.autoBind(function() {
     var node = this.getTurnResultDialogNode();
     if (node) {
       node.style.display = '';
     }
-  },
+  }),
 
   closeTurnResultModal: function() {
     var node = this.getTurnResultDialogNode();
@@ -149,35 +149,35 @@ var Room = React.createClass({
     }
   },
 
-  showGameResultModal: function() {
+  showGameResultModal: React.autoBind(function() {
     var node = this.getGameResultDialogNode();
     if (node) {
       node.style.display = '';
     }
-  },
+  }),
 
   // === Sound methods ===
 
-  playShockEffect: function(options) {
+  playShockEffect: React.autoBind(function(options) {
     if (options && options.playbackRate) {
       this.shockSound.rate(options.playbackRate);
     }
     this.shockSound.play();
-  },
+  }),
 
-  playSafeEffect: function() {
+  playSafeEffect: React.autoBind(function() {
     this.safeSound.play();
-  },
+  }),
 
   // === State setters ===
 
-  setSelectedChair: function(chair) {
+  setSelectedChair: React.autoBind(function(chair) {
     this.setState({ selectedChair: chair });
-  },
+  }),
 
-  setShowShock: function(value) {
+  setShowShock: React.autoBind(function(value) {
     this.setState({ showShock: value });
-  },
+  }),
 
   // === Player operation (computed from state) ===
 
@@ -250,7 +250,7 @@ var Room = React.createClass({
     this.setState({ selectState: { status: result.status, error: result.error } });
   },
 
-  copyRoomId: async function() {
+  copyRoomId: React.autoBind(async function() {
     try {
       await navigator.clipboard.writeText(this.roomId);
       this.setState({ copyTooltip: 'IDをコピーしました' });
@@ -258,17 +258,17 @@ var Room = React.createClass({
       console.error(error);
       this.setState({ copyTooltip: 'IDをコピーできませんでした' });
     }
-  },
+  }),
 
-  handleSubmitActivate: async function() {
+  handleSubmitActivate: React.autoBind(async function() {
     this.closeNoticeModal();
     var res = await activateApi(this.roomId);
     if (res.status !== 200) {
       console.error(res.error);
     }
-  },
+  }),
 
-  handleChangeTurn: async function() {
+  handleChangeTurn: React.autoBind(async function() {
     this.closeTurnResultModal();
     var res = await changeTurnApi({
       roomId: this.roomId,
@@ -278,7 +278,7 @@ var Room = React.createClass({
       console.error(res.error);
     }
     this.setState({ selectedChair: null });
-  },
+  }),
 
   isAllReady: function() {
     var roomData = this.state.roomData;
@@ -289,10 +289,10 @@ var Room = React.createClass({
     );
   },
 
-  handleFormSubmit: function(e) {
+  handleFormSubmit: React.autoBind(function(e) {
     e.preventDefault();
     this.selectChair();
-  },
+  }),
 
   // === Lifecycle ===
 
@@ -323,6 +323,7 @@ var Room = React.createClass({
   },
 
   componentDidUpdate: function(prevProps, prevState) {
+    var self = this;
     var roomData = this.state.roomData;
     var prevRoomData = prevState.roomData;
 
@@ -331,18 +332,16 @@ var Room = React.createClass({
       this.state.selectState !== prevState.selectState &&
       this.state.selectedChair
     ) {
-      var message = this.state.selectState.status === 200
-        ? '番の椅子を選択しました。'
-        : '椅子の選択に失敗しました。';
-      toastStore.open(
-        React.DOM.span(null,
-          React.DOM.span(
-            {style: {color: 'red', fontWeight: 'bold', fontSize: '1.2rem'}},
-            this.state.selectedChair
-          ),
-          message
-        )
+      var toastContent = React.DOM.span(null,
+        [React.DOM.span(
+          {style: {color: 'red', fontWeight: 'bold', fontSize: '1.2rem'}},
+          this.state.selectedChair
+        ),
+        this.state.selectState.status === 200
+          ? '番の椅子を選択しました。'
+          : '椅子の選択に失敗しました。']
       );
+      setTimeout(function() { toastStore.open(toastContent); }, 0);
     }
 
     // Room effect (equivalent to useRoomEffect)
@@ -371,27 +370,33 @@ var Room = React.createClass({
         }
 
         if (roomData.round.phase === 'sitting' && isAttacker) {
-          RoomPhaseHandlers.handleSittingPhase(this.showNoticeModal, this.closeNoticeModal);
+          setTimeout(function() {
+            RoomPhaseHandlers.handleSittingPhase(self.showNoticeModal, self.closeNoticeModal);
+          }, 0);
         }
       }
       if (roomData.round.phase === 'activating' && isDefender) {
-        RoomPhaseHandlers.handleActivatingPhase(
-          this.showNoticeModal,
-          this.handleSubmitActivate
-        );
+        setTimeout(function() {
+          RoomPhaseHandlers.handleActivatingPhase(
+            self.showNoticeModal,
+            self.handleSubmitActivate
+          );
+        }, 0);
       }
       if (
         roomData.round.phase === 'result' &&
         !roomData.round.result.shownResult
       ) {
-        RoomPhaseHandlers.handleResultPhase(
-          roomData,
-          this.showGameResultModal,
-          this.showTurnResultModal,
-          this.setShowShock,
-          this.playShockEffect,
-          this.playSafeEffect
-        );
+        setTimeout(function() {
+          RoomPhaseHandlers.handleResultPhase(
+            roomData,
+            self.showGameResultModal,
+            self.showTurnResultModal,
+            self.setShowShock,
+            self.playShockEffect,
+            self.playSafeEffect
+          );
+        }, 0);
       }
     }
   },
@@ -404,22 +409,22 @@ var Room = React.createClass({
     var self = this;
 
     return RoomContainer(null,
-      GameStatusContainer(null,
-        RoundStatus({round: roomData && roomData.round, userId: userId}),
+      [GameStatusContainer(null,
+        [RoundStatus({round: roomData && roomData.round, userId: userId}),
         PlayerStatusContainer(null,
-          PlayerStatus({
+          [PlayerStatus({
             userId: userId,
             status: roomData && roomData.players.find(function(p) { return p.id === userId; })
           }),
           PlayerStatus({
             userId: userId,
             status: roomData && roomData.players.find(function(p) { return p.id !== userId; })
-          })
-        )
+          })]
+        )]
       ),
       React.DOM.form({onSubmit: this.handleFormSubmit},
-        ChairContainer(null,
-          roomData && roomData.remainingChairs.map(function(chair) {
+        [ChairContainer(null,
+          [roomData && roomData.remainingChairs.map(function(chair) {
             return Chair({
               key: chair,
               chair: chair,
@@ -434,14 +439,14 @@ var Room = React.createClass({
               round: roomData && roomData.round,
               userId: userId
             })
-          )
+          )]
         ),
         !playerOperation.wait &&
           !playerOperation.activate &&
           this.state.selectedChair &&
           React.DOM.div({className: 'sticky bottom-3'},
             Button({styles: 'border-2 border-red-700'}, '確定')
-          )
+          )]
       ),
       NoticeDialog({
         ref: 'noticeDialog',
@@ -473,7 +478,7 @@ var Room = React.createClass({
         userId: userId,
         close: function() { window.location.href = '/'; }
       }),
-      ActivateEffect({result: this.state.showShock})
+      ActivateEffect({result: this.state.showShock})]
     );
   }
 });
