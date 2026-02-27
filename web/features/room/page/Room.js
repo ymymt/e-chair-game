@@ -85,7 +85,7 @@ var Room = React.createClass({
   showNoticeModal: function(data, miliseconds) {
     var node = this.getNoticeDialogNode();
     if (node) {
-      node.showModal();
+      node.style.display = '';
       this.setState({
         noticeDialogState: {
           title: data.title,
@@ -105,35 +105,35 @@ var Room = React.createClass({
   closeNoticeModal: function() {
     var node = this.getNoticeDialogNode();
     if (node) {
-      node.close();
+      node.style.display = 'none';
     }
   },
 
   showCreaterWaitingStartModal: function() {
     var node = this.getWaitingCreaterStartDialogNode();
     if (node) {
-      node.showModal();
+      node.style.display = '';
     }
   },
 
   closeCreaterWaitingStartModal: function() {
     var node = this.getWaitingCreaterStartDialogNode();
     if (node) {
-      node.close();
+      node.style.display = 'none';
     }
   },
 
   showStartTurnModal: function(miliseconds) {
     var node = this.getStartTurnDialogNode();
     if (node) {
-      node.showModal();
+      node.style.display = '';
     }
     if (miliseconds) {
       var self = this;
       setTimeout(function() {
         var n = self.getStartTurnDialogNode();
         if (n) {
-          n.close();
+          n.style.display = 'none';
         }
       }, miliseconds);
     }
@@ -142,21 +142,21 @@ var Room = React.createClass({
   showTurnResultModal: function() {
     var node = this.getTurnResultDialogNode();
     if (node) {
-      node.showModal();
+      node.style.display = '';
     }
   },
 
   closeTurnResultModal: function() {
     var node = this.getTurnResultDialogNode();
     if (node) {
-      node.close();
+      node.style.display = 'none';
     }
   },
 
   showGameResultModal: function() {
     var node = this.getGameResultDialogNode();
     if (node) {
-      node.showModal();
+      node.style.display = '';
     }
   },
 

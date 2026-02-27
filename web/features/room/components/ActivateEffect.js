@@ -16,7 +16,7 @@ var ActivateEffect = React.createClass({
         )
       );
     }
-    return null;
+    return React.DOM.span(null);
   }
 });
 

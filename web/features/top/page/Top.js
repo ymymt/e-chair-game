@@ -29,7 +29,7 @@ var Top = React.createClass({
   showJoinModal: function() {
     var node = this.getJoinDialogNode();
     if (node) {
-      node.showModal();
+      node.style.display = '';
       this.setState({ isShowJoinDialog: true });
     }
   },
@@ -37,7 +37,7 @@ var Top = React.createClass({
   closeJoinModal: function() {
     var node = this.getJoinDialogNode();
     if (node) {
-      node.close();
+      node.style.display = 'none';
       this.setState({ isShowJoinDialog: false });
     }
   },
