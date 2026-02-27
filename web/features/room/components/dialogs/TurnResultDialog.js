@@ -56,11 +56,10 @@ var TurnResultDialog = React.createClass({
       ? '電気椅子を回避しました'
       : '電気椅子を回避されました...';
 
-    return React.DOM.dialog({
-      className: 'min-w-fit max-w-lg top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  backdrop:bg-black/80 shadow-sm w-full',
-      ref: 'dialog'
-    },
-      React.DOM.div({className: 'grid place-items-center gap-4 backdrop:bg-black/80 p-6 text-card-foreground shadow-sm w-full bg-gray-800 border-2 border-red-500'},
+    return React.DOM.div({ref: 'dialog', style: {display: 'none'}},
+      React.DOM.div({className: 'fixed inset-0 bg-black/80 z-50'}),
+      React.DOM.div({className: 'fixed min-w-fit max-w-lg top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full'},
+        React.DOM.div({className: 'grid place-items-center gap-4 p-6 text-card-foreground shadow-sm w-full bg-gray-800 border-2 border-red-500'},
         React.DOM.div({className: 'flex items-center flex-col gap-4'},
           React.DOM.h2({className: 'font-semibold text-red-500'},
             React.DOM.span({className: 'text-3xl'}, headingText)
@@ -126,6 +125,7 @@ var TurnResultDialog = React.createClass({
           )
         ),
         Button({onClick: close}, '次へ進む')
+        )
       )
     );
   }

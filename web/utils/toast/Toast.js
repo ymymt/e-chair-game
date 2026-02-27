@@ -9,7 +9,7 @@ var Toast = React.createClass({
   render: function() {
     var toast = this.context.toast;
     if (!toast || !toast.isOpen) {
-      return null;
+      return React.DOM.span(null);
     }
     return React.DOM.div({className: 'fixed p-4 mx-1 bg-gray-800 border-2 text-white rounded-lg shadow-lg'},
       toast.message
