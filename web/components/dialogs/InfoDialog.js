@@ -7,17 +7,15 @@ var InfoDialog = React.createClass({
   render: function() {
     var props = this.props;
     var border = props.borderColor ? props.borderColor : 'border-red-500';
-    return (
-      <dialog
-        className="min-w-fit max-w-lg top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-transparent backdrop:bg-black/80 shadow-sm w-full"
-        ref="dialog"
-      >
-        <div
-          className={'animate-scale-in grid gap-4 backdrop:bg-black/80 p-6 text-card-foreground shadow-sm w-full bg-gray-800 border-2 ' + border}
-        >
-          {props.children}
-        </div>
-      </dialog>
+    return React.DOM.dialog({
+      className: 'min-w-fit max-w-lg top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-transparent backdrop:bg-black/80 shadow-sm w-full',
+      ref: 'dialog'
+    },
+      React.DOM.div({
+        className: 'animate-scale-in grid gap-4 backdrop:bg-black/80 p-6 text-card-foreground shadow-sm w-full bg-gray-800 border-2 ' + border
+      },
+        props.children
+      )
     );
   }
 });

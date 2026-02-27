@@ -11,10 +11,8 @@ var Toast = React.createClass({
     if (!toast || !toast.isOpen) {
       return null;
     }
-    return (
-      <div className="fixed p-4 mx-1 bg-gray-800 border-2 text-white rounded-lg shadow-lg">
-        {toast.message}
-      </div>
+    return React.DOM.div({className: 'fixed p-4 mx-1 bg-gray-800 border-2 text-white rounded-lg shadow-lg'},
+      toast.message
     );
   }
 });

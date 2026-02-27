@@ -66,59 +66,53 @@ var GameResultDialog = React.createClass({
       }
     };
 
-    return (
-      <dialog
-        className="min-w-fit max-w-lg top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-transparent backdrop:bg-black/80 shadow-sm w-full"
-        ref="dialog"
-      >
-        <div
-          className={animation + ' grid place-items-center gap-4 backdrop:bg-black/80 p-6 text-card-foreground shadow-sm w-full bg-gray-800 border-2 ' + borderColor}
-        >
-          <div className="flex items-center flex-col gap-4">
-            <h2 className="font-semibold text-red-500">ゲーム終了</h2>
-            {isWinner ? (
-              <Trophy className="text-yellow-500 w-24 h-24 animate-pulse" />
-            ) : isDraw ? (
-              <Meh className="text-gray-500 w-24 h-24 animate-pulse" />
-            ) : (
-              <Skull className="text-red-500 w-24 h-24 animate-pulse" />
-            )}
-            <div className="font-bold text-white text-4xl">
-              {isWinner ? '勝利!' : isDraw ? '引き分け' : '敗北...'}
-            </div>
-            <p className="text-white text-center font-bold text-2xl">
-              {getWinningCondition()}
-            </p>
-            <div className="flex gap-6">
-              <div className="flex flex-col items-center">
-                <div className="text-white font-bold text-md">あなたのスコア</div>
-                <div className="text-gray-400">獲得ポイント</div>
-                <div className="font-bold text-green-500 text-4xl">
-                  {myStatus && myStatus.point}
-                </div>
-                <div className="text-gray-400">感電回数</div>
-                <div className="font-bold text-red-500 text-4xl">
-                  {myStatus && myStatus.shockedCount}
-                </div>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="text-white font-bold text-md">相手のスコア</div>
-                <div className="text-gray-400">獲得ポイント</div>
-                <div className="font-bold text-green-500 text-4xl">
-                  {opponentStatus && opponentStatus.point}
-                </div>
-                <div className="text-gray-400">感電回数</div>
-                <div className="font-bold text-red-500 text-4xl">
-                  {opponentStatus && opponentStatus.shockedCount}
-                </div>
-              </div>
-            </div>
-          </div>
-          <Button onClick={close} bgColor={bgColor}>
-            ゲーム終了
-          </Button>
-        </div>
-      </dialog>
+    return React.DOM.dialog({
+      className: 'min-w-fit max-w-lg top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-transparent backdrop:bg-black/80 shadow-sm w-full',
+      ref: 'dialog'
+    },
+      React.DOM.div({
+        className: animation + ' grid place-items-center gap-4 backdrop:bg-black/80 p-6 text-card-foreground shadow-sm w-full bg-gray-800 border-2 ' + borderColor
+      },
+        React.DOM.div({className: 'flex items-center flex-col gap-4'},
+          React.DOM.h2({className: 'font-semibold text-red-500'}, 'ゲーム終了'),
+          isWinner
+            ? Trophy({className: 'text-yellow-500 w-24 h-24 animate-pulse'})
+            : isDraw
+            ? Meh({className: 'text-gray-500 w-24 h-24 animate-pulse'})
+            : Skull({className: 'text-red-500 w-24 h-24 animate-pulse'}),
+          React.DOM.div({className: 'font-bold text-white text-4xl'},
+            isWinner ? '勝利!' : isDraw ? '引き分け' : '敗北...'
+          ),
+          React.DOM.p({className: 'text-white text-center font-bold text-2xl'},
+            getWinningCondition()
+          ),
+          React.DOM.div({className: 'flex gap-6'},
+            React.DOM.div({className: 'flex flex-col items-center'},
+              React.DOM.div({className: 'text-white font-bold text-md'}, 'あなたのスコア'),
+              React.DOM.div({className: 'text-gray-400'}, '獲得ポイント'),
+              React.DOM.div({className: 'font-bold text-green-500 text-4xl'},
+                myStatus && myStatus.point
+              ),
+              React.DOM.div({className: 'text-gray-400'}, '感電回数'),
+              React.DOM.div({className: 'font-bold text-red-500 text-4xl'},
+                myStatus && myStatus.shockedCount
+              )
+            ),
+            React.DOM.div({className: 'flex flex-col items-center'},
+              React.DOM.div({className: 'text-white font-bold text-md'}, '相手のスコア'),
+              React.DOM.div({className: 'text-gray-400'}, '獲得ポイント'),
+              React.DOM.div({className: 'font-bold text-green-500 text-4xl'},
+                opponentStatus && opponentStatus.point
+              ),
+              React.DOM.div({className: 'text-gray-400'}, '感電回数'),
+              React.DOM.div({className: 'font-bold text-red-500 text-4xl'},
+                opponentStatus && opponentStatus.shockedCount
+              )
+            )
+          )
+        ),
+        Button({onClick: close, bgColor: bgColor}, 'ゲーム終了')
+      )
     );
   }
 });
