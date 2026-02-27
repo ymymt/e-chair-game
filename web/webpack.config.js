@@ -11,6 +11,9 @@ var envKeys = Object.keys(process.env)
   }, {});
 
 module.exports = {
+  externals: {
+    'react': 'React',
+  },
   entry: ['babel-polyfill', './client.js'],
   output: {
     path: path.resolve(__dirname, 'static'),
